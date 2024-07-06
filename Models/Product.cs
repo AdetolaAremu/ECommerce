@@ -19,8 +19,10 @@ namespace ecommerce.Models
 
     public ICollection<Tag> Tags { get; set; }
     public ICollection<Review> Reviews { get; set; }
+
+    public int UserId { get; set; }
     public User User { get; set; }
-    public ProductCategory ProductCategory { get; set; }
+    public ICollection<ProductCategory> ProductCategories { get; set; }
     public Discount Discount { get; set; }
     public Coupon Coupon { get; set; }
     public ICollection<CouponUsage> CouponUsage { get; set; }

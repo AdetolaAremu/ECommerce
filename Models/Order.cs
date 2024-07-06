@@ -18,6 +18,6 @@ namespace ecommerce.Models
     public int UserId { get; set; }
     public User User { get; set; }
 
-    public ICollection<Product> Products { get; set; }
+    public ICollection<OrderedProduct> OrderedProducts { get; set; }
   }
 }

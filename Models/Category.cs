@@ -10,6 +10,6 @@ namespace ecommerce.Models
     public int Id { get; set; }
     public string Name { get; set; }
     public bool Visible { get; set; } = true;
-    public ProductCategory ProductCategory { get; set; }
+    public ICollection<ProductCategory> ProductCategories { get; set; }
   }
 }
