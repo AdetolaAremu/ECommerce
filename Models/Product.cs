@@ -24,8 +24,8 @@ namespace ecommerce.Models
     public User User { get; set; }
     public ICollection<ProductCategory> ProductCategories { get; set; }
     public Discount Discount { get; set; }
-    public Coupon Coupon { get; set; }
-    public ICollection<CouponUsage> CouponUsage { get; set; }
+    public ICollection<Coupon> Coupons { get; set; }
+    public ICollection<CouponUsage> CouponUsages { get; set; }
 
     public DateTime? CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }

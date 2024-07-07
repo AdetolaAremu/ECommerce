@@ -18,7 +18,7 @@ namespace ecommerce.Models
     public ICollection<Product> Products { get; set; }
     public ICollection<Review> Reviews { get; set; }
     public ShoppingCart ShoppingCart { get; set; }
-    public ICollection<CouponUsage> CouponUsage { get; set; }
+    public ICollection<CouponUsage> CouponUsages { get; set; }
     public ICollection<Order> Orders { get; set; }
   }
 }

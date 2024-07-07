@@ -3,16 +3,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ecommerce.Models
 {
-  public class ShoppingCart
+  public class CartItem
   {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
-    public int UserId { get; set; }
-    public User User { get; set; }
+    public int ProductId { get; set; }
 
-    public int CartItemId { get; set; }
-    public ICollection<CartItem> CartItems { get; set; }
+    public int ShoppingCartId { get; set; }
+    public ShoppingCart ShoppingCart { get; set; }
   }
 }
