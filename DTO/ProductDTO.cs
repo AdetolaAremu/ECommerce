@@ -15,6 +15,7 @@ namespace ecommerce.DTO
     public ICollection<string> Images { get; set; }
     public string Manufacturer { get; set; }
     public int UserId { get; set; }
+    public string Slug { get; set; }
     public DateTime? CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
   }
@@ -51,5 +52,7 @@ namespace ecommerce.DTO
 
     [Required]
     public int UserId { get; set; }
+
+    public string Slug { get; set; } // will be generated
   }
 }

@@ -1,28 +1,33 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ecommerce.DTO
+namespace ecommerce.Services.Interfaces
 {
-  public class CouponDTO
+  public class ICouponRepository
   {
+    [Required]
     public int Id { get; set; }
+
+    [Required]
     public int ProductId { get; set; }
+
+    [Required]
+    [StringLength(100)]
     public string Code { get; set; }
-    
+
+    [Required]
     public DateTime DiscountStarts { get; set; }
     public DateTime? DiscountEnds { get; set; }
-
-    public DateTime? CreatedAt { get; set; }
-    public DateTime? UpdatedAt { get; set; }
   }
 
-  public class CreateCouponDTO
+  public class UpdateICouponRepository
   {
     [Required]
     public int ProductId { get; set; }
 
-    [StringLength(150)]
+    [Required]
+    [StringLength(100)]
     public string Code { get; set; }
-    
+
     [Required]
     public DateTime DiscountStarts { get; set; }
     public DateTime? DiscountEnds { get; set; }

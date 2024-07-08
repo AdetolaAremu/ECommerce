@@ -16,6 +16,7 @@ namespace ecommerce.Models
     public string CoverImage { get; set; }
     public ICollection<string> Images { get; set; }
     public string Manufacturer { get; set; }
+    public string Slug { get; set; }
 
     public ICollection<Tag> Tags { get; set; }
     public ICollection<Review> Reviews { get; set; }

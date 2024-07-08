@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ecommerce.DTO
 {
-  public class GetCartItemDTO
+  public class CartItemDTO
   {
     public int Id { get; set; }
     public int ProductId { get; set; }

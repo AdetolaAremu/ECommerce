@@ -3,11 +3,16 @@ using ecommerce.Models;
 
 namespace ecommerce.DTO
 {
-  public class GetCategoryDTO
+  public class CategoryDTO
   {
+    [Required]
     public int Id { get; set; }
-    public int Name { get; set; }
-    public bool Visible { get; set; }
+
+    [Required]
+    public int UserId { get; set; }
+
+    [Required]
+    public int ProductId { get; set; }
   }
 
   public class CreateCategoryDTO

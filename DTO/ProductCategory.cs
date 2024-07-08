@@ -2,22 +2,19 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ecommerce.DTO
 {
-  public class CouponUsageDTO
+  public class ProductCategoryDTO
   {
     public int Id { get; set; }
     public int ProductId { get; set; }
-    public int UserId { get; set; }
-
-    public DateTime? CreatedAt { get; set; }
-    public DateTime? UpdatedAt { get; set; }
+    public int CategoryId { get; set; }
   }
 
-  public class CreateCouponUsageDTO
+  public class CreateProductCategory
   {
     [Required]
     public int ProductId { get; set; }
 
     [Required]
-    public int UserId { get; set; }
+    public int CategoryId { get; set; }
   }
 }
