@@ -1,4 +1,5 @@
 using ecommerce.DataStore;
+using ecommerce.Helpers;
 using Microsoft.EntityFrameworkCore;
 // using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
 });
 
+builder.Services.AddScoped<ISlugService, SlugService>();
 
 var app = builder.Build();
 

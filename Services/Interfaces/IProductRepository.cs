@@ -6,7 +6,7 @@ namespace ecommerce.Services.Interfaces
   public interface IProductRepository
   {
     // get all products, be able to search, sort and paginate
-    IEnumerable<Product> GetAllProducts(string searchTerm, string sortBy, int itemSize);
+    IEnumerable<Product> GetAllProducts(string searchTerm, string sortBy, int pageNumber, int itemSizem);
 
     // get one product
     Product GetOneProduct(int productId);
@@ -15,13 +15,13 @@ namespace ecommerce.Services.Interfaces
     bool CreateProduct(CreateProductDTO createProductDTO);
 
     // update product
-    bool UpdateProduct(CreateProductDTO createProductDTO, int productId);
+    bool UpdateProduct(ProductDTO productDTO, int productId);
 
     // delete product
-    bool DeleteProduct(int productId);
+    bool DeleteProduct(Product product);
 
     // get products by category
-    IEnumerable<Product> GetProductsByCategory(int categoryId);
+    IEnumerable<Product> GetProductsByCategory(int categoryId, int pageNumber, int pageSize);
 
     // saveProduct
     bool SaveTransaction();
