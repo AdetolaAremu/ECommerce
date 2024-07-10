@@ -11,6 +11,9 @@ namespace ecommerce.Services.Interfaces
     // get Once Category
     Category GetOneCategory(int categoryId);
 
+    // check if category exists
+    bool CategoryExists(int categoryId);
+
     // Create category
     bool CreateCategory(CreateCategoryDTO createCategoryDTO);
 
@@ -18,7 +21,7 @@ namespace ecommerce.Services.Interfaces
     bool UpdateCategory(int categoryId, CategoryDTO categoryDTO);
 
     // delete category
-    bool DeleteCategory(int categoryId);
+    bool DeleteCategory(Category);
 
     // save category
     bool SaveTransaction();
