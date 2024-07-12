@@ -6,9 +6,15 @@ namespace ecommerce.Services.Interfaces
   public interface ICategoryUsageRepository
   {
     // get all coupon usages
-    IEnumerable<CouponUsage> GetAllCouponUsages();
+    IEnumerable<CouponUsage> GetAllCouponUsages(string searchTerm, int pageSize, int pageNumber);
 
     // get all coupon usages for a product
     IEnumerable<CouponUsage> GetCouponUsagesForAProduct(int ProductId);
+
+    // get one coupon usage details
+    CouponUsage GetOneCouponUsage(int couponUsageId);
+    
+    // check if coupon exists
+    bool CouponUsageExists(int couponUsageId);
   }
 }
