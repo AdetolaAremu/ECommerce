@@ -23,7 +23,7 @@ namespace ecommerce.Services
          || cu.Product.Title.Contains(searchTerm) || cu.Product.Manufacturer.Contains(searchTerm));
       }
 
-      return query.Take(pageSize).ToList();
+      return query.Skip((pageNumber -1) * pageSize).Take(pageSize).ToList();
     }
 
     public IEnumerable<CouponUsage> GetCouponUsagesForAProduct(int ProductId)

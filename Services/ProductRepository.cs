@@ -49,7 +49,7 @@ namespace ecommerce.Services
         }
       }
 
-      return query.Skip((pageNumber -1) * itemSize).Take(itemSize).ToList();
+      return query.Skip((pageNumber - 1) * itemSize).Take(itemSize).ToList();
     }
 
     public Product GetOneProduct(int productId)

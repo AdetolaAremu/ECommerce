@@ -1,35 +1,25 @@
 using System.ComponentModel.DataAnnotations;
+using ecommerce.DTO;
+using ecommerce.Models;
 
 namespace ecommerce.Services.Interfaces
 {
-  public class ICouponRepository
+  public interface ICouponRepository
   {
-    [Required]
-    public int Id { get; set; }
+    IEnumerable<Coupon> GetAllCoupons(string searchTerm, int pageSize, int pageNumber);
 
-    [Required]
-    public int ProductId { get; set; }
+    Coupon GetOneCoupon(int couponId);
 
-    [Required]
-    [StringLength(100)]
-    public string Code { get; set; }
+    IEnumerable<Coupon> GetAllCouponsPerProduct(int ProductId, int pageSize, int pageNumber);
 
-    [Required]
-    public DateTime DiscountStarts { get; set; }
-    public DateTime? DiscountEnds { get; set; }
-  }
+    bool CouponExists(int couponId);
+    
+    bool CreateCoupon(CreateCouponDTO createCouponDTO);
 
-  public class UpdateICouponRepository
-  {
-    [Required]
-    public int ProductId { get; set; }
+    bool UpdateCoupon(int couponId, CouponDTO couponDTO);
 
-    [Required]
-    [StringLength(100)]
-    public string Code { get; set; }
+    bool DeleteCoupon(Coupon coupon);
 
-    [Required]
-    public DateTime DiscountStarts { get; set; }
-    public DateTime? DiscountEnds { get; set; }
+    bool SaveTransaction();
   }
 }
