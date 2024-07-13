@@ -6,10 +6,13 @@ namespace ecommerce.Services.Interfaces
   public interface ITagRepository
   {
     // get all tags
-    IEnumerable<Tag> GetAllTags();
+    IEnumerable<Tag> GetAllTags(int pageNumber, int pageSize);
     
     // Get A tag
-    Tag GetATag(CreateTagDTO createTagDTO);
+    Tag GetATag(int tagId);
+
+    // tag exists
+    bool CheckIfTagExists(int tagId);
 
     // create a tag
     bool CreateTag(CreateTagDTO createTagDTO);
@@ -19,5 +22,8 @@ namespace ecommerce.Services.Interfaces
 
     // delete tag
     bool DeleteTag(Tag tag);
+
+    // save transaction
+    bool SaveTransaction();
   }
 }
