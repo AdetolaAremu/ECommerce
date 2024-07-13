@@ -11,6 +11,9 @@ namespace ecommerce.Services.Interfaces
     // get one product
     Product GetOneProduct(int productId);
 
+    // check if product exists
+    bool CheckIfProductExists(int productId);
+
     // create product
     bool CreateProduct(CreateProductDTO createProductDTO);
 

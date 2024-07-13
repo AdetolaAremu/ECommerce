@@ -6,19 +6,19 @@ namespace ecommerce.Services.Interfaces
   public interface IShoppingCartRepository
   {
     // get logged in user cart
-    ShoppingCart GetLoggedInUserCart();
+    ShoppingCart GetLoggedInUserCart(int userId);
 
     // add to cart items
-    bool AddItemtoShoppingCart(CartItemDTO cartItemDTO);
+    bool AddItemtoShoppingCart(CartItemDTO cartItemDTO, int userId);
 
     // cart item exist (product id)
-    bool CheckIfItemExists(int productId);
+    bool CheckIfProductExistsInCartItem(int productId, int userId);
 
     // remove items from shoppingCart
-    bool ClearShoppingCart();
+    bool ClearShoppingCart(int userId);
 
     // remove an items from cart
-    bool removeItemFromShoppingCart(int productId);
+    bool RemoveItemFromShoppingCart(int productId, int userId);
 
     // save transaction
     bool SaveTransaction();

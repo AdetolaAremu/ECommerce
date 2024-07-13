@@ -127,6 +127,11 @@ namespace ecommerce.Services
       return SaveTransaction();
     }
 
+    public bool CheckIfProductExists(int productId)
+    {
+      return _applicationDBContext.Products.Any(p => p.Id == productId);
+    }
+
     public bool DeleteProduct(Product product)
     {
       _applicationDBContext.Remove(product);
