@@ -8,6 +8,7 @@ namespace ecommerce.DTO
     public int Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
+    public string Email { get; set; }
     public bool LoginStatus { get; set; } = false;
     public string? avatar { get; set; }
     public EnumUserType UserType { get; set; }
@@ -24,6 +25,15 @@ namespace ecommerce.DTO
     public string LastName { get; set; }
 
     [Required]
+    [StringLength(50)]
+    public string Password { get; set; }
+
+    [Required]
+    [StringLength(200)]
+    [EmailAddress]
+    public string Email { get; set; }
+
+    [Required]
     [StringLength(200)]
     public bool LoginStatus { get; set; }
 
@@ -32,5 +42,17 @@ namespace ecommerce.DTO
 
     [Required]
     public EnumUserType UserType { get; set; }
+  }
+
+  public class UserLoginDTO
+  {
+    [Required]
+    [StringLength(200)]
+    [EmailAddress]
+    public string Email { get; set; }
+
+    [Required]
+    [StringLength(50)]
+    public string Password { get; set; }
   }
 }
