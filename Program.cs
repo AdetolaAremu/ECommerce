@@ -7,6 +7,7 @@ using ecommerce.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Slugify;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,9 +21,14 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
 });
 
+builder.Services.AddControllers().AddNewtonsoftJson(o => o.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+    .AddXmlDataContractSerializerFormatters();
+
+builder.Services.AddSingleton<SlugHelper>();
+
 builder.Services.AddScoped<ISlugService, SlugService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-builder.Services.AddScoped<ICategoryUsageRepository, ICategoryUsageRepository>();
+builder.Services.AddScoped<ICategoryUsageRepository, CategeoryUsageRepository>();
 builder.Services.AddScoped<ICouponRepository, CouponRepository>();
 builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 builder.Services.AddScoped<IOrderRespository, OrderRepository>();
@@ -63,5 +69,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.MapControllers();
+app.UseAuthorization();
 app.Run();

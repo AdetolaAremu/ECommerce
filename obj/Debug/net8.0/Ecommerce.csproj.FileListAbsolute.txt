@@ -142,3 +142,6 @@ C:\Users\adetola\documents\Ecommerce\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.
 C:\Users\adetola\documents\Ecommerce\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\adetola\documents\Ecommerce\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\adetola\documents\Ecommerce\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\adetola\documents\Ecommerce\bin\Debug\net8.0\BCrypt.Net-Next.dll
+C:\Users\adetola\documents\Ecommerce\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\adetola\documents\Ecommerce\bin\Debug\net8.0\Slugify.Core.dll

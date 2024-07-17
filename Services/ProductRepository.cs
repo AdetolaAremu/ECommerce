@@ -10,9 +10,9 @@ namespace ecommerce.Services
   public class ProductRepository : IProductRepository
   {
     private ApplicationDBContext _applicationDBContext;
-    private readonly SlugService _slugService;
+    private readonly ISlugService _slugService;
 
-    public ProductRepository(ApplicationDBContext applicationDBContext, SlugService slugService)
+    public ProductRepository(ApplicationDBContext applicationDBContext, ISlugService slugService)
     {
       _applicationDBContext = applicationDBContext;
       _slugService = slugService;
