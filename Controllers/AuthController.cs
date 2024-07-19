@@ -1,8 +1,6 @@
 using ecommerce.DTO;
 using ecommerce.Helpers;
-using ecommerce.Models;
-using ecommerce.Services;
-using ecommerce.Services.Auth;
+using ecommerce.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ecommerce.Controllers
@@ -11,10 +9,10 @@ namespace ecommerce.Controllers
   [Route("/api/auth")]
   public class AuthController : ControllerBase
   {
-    private UserRepository _userRepository;
+    private IUserRepository _userRepository;
     private ResponseHelper _responseHelper;
 
-    public AuthController(UserRepository userRepository, ResponseHelper responseHelper)
+    public AuthController(IUserRepository userRepository, ResponseHelper responseHelper)
     {
       _userRepository = userRepository;
       _responseHelper = responseHelper;
@@ -25,20 +23,20 @@ namespace ecommerce.Controllers
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(CreateUserDTO))]
-    public IActionResult RegisterUser([FromBody]CreateUserDTO createUserDTO, IFormFile avatar)
+    public IActionResult RegisterUser([FromBody]CreateUserDTO createUserDTO)
     {
-      string avatarPath = null;
-      if (avatar != null && avatar.Length > 0)
-      {
-          // You can save the file to the server or process it as needed
-          var filePath = Path.Combine("uploads", avatar.FileName);
-          using (var stream = new FileStream(filePath, FileMode.Create))
-          {
-              avatar.CopyToAsync(stream);
-          }
-          avatarPath = filePath; // Set the path or URL to the uploaded file
-          // Console.ReadLine(avatarPath);
-      }
+      // string avatarPath = null;
+      // if (avatar != null && avatar.Length > 0)
+      // {
+      //     // You can save the file to the server or process it as needed
+      //     var filePath = Path.Combine("uploads", upload.FileName);
+      //     using (var stream = new FileStream(filePath, FileMode.Create))
+      //     {
+      //         upload.CopyToAsync(stream);
+      //     }
+      //     avatarPath = filePath; // Set the path or URL to the uploaded file
+      //     // Console.ReadLine(avatarPath);
+      // }
 
       // if request body is empty
       if (createUserDTO == null) return _responseHelper.ErrorResponseHelper<string>("Request body cannot be empty", null, 422);
@@ -80,6 +78,13 @@ namespace ecommerce.Controllers
       if (checkLoginCredentials == null) return _responseHelper.ErrorResponseHelper<string>("Login or Email is incorrect");
 
       return _responseHelper.SuccessResponseHelper("User token retrieved successfully", checkLoginCredentials);
+    }
+
+    [HttpPost("upload")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public IActionResult Upload(IFormFile file)
+    {
+      return Ok(file);
     }
   }
 }

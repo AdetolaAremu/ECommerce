@@ -44,7 +44,7 @@ namespace ecommerce.Services
         LastName = createUserDTO.LastName,
         Email = createUserDTO.Email,
         Password = gethashedPassword,
-        LoginStatus = createUserDTO.LoginStatus
+        // LoginStatus = createUserDTO.LoginStatus
       };
 
       _applicationDBContext.Add(user);

@@ -15,7 +15,7 @@ namespace ecommerce.Models
     public string Password { get; set; }
     public bool LoginStatus { get; set; } = false;
     public string? avatar { get; set; }
-    public EnumUserType UserType { get; set; }
+    public EnumUserType UserType { get; set; } = EnumUserType.Seller;
 
     public ICollection<Product> Products { get; set; }
     public ICollection<Review> Reviews { get; set; }
