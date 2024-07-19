@@ -26,6 +26,7 @@ builder.Services.AddControllers().AddNewtonsoftJson(o => o.SerializerSettings.Re
     .AddXmlDataContractSerializerFormatters();
 
 builder.Services.AddSingleton<SlugHelper>();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<ISlugService, SlugService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();

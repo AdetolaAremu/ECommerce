@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using ecommerce.DataStore;
 using ecommerce.DTO;
 using ecommerce.Helpers;
@@ -11,16 +12,47 @@ namespace ecommerce.Services
   {
     private ApplicationDBContext _applicationDBContext;
     private AuthService _authService;
+    private IHttpContextAccessor _httpContextAccessor;
 
-    public UserRepository(ApplicationDBContext applicationDBContext, AuthService authService)
+    public UserRepository(ApplicationDBContext applicationDBContext, AuthService authService, IHttpContextAccessor httpContextAccessor)
     {
       _applicationDBContext = applicationDBContext;
       _authService = authService;
+      _httpContextAccessor = httpContextAccessor;
     }
 
     public IEnumerable<User> GeAllUsers(int pageSize, int pageNumber)
     {
       return _applicationDBContext.Users.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+    }
+
+    public User GetOneUser(int userId)
+    {
+      return _applicationDBContext.Users.Where(u => u.Id == userId).First();
+    }
+
+    public User GetLoggedInUser()
+    {
+      var getUserId = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+      if (String.IsNullOrEmpty(getUserId)) return null;
+
+      return GetOneUser(int.Parse(getUserId));
+    }
+
+    public bool ChangeLoginStatus(int userId, UserDTO userDTO)
+    {
+      var user = _applicationDBContext.Users.Where(u => u.Id == userId).First();
+
+      if (user.LoginStatus) {
+        user.LoginStatus = false;
+      }
+
+      if (user.LoginStatus) {
+        user.LoginStatus = false;
+      }
+
+      return SaveTransaction();
     }
 
     public bool CheckIfUserIsAnAdmin(int userId)
@@ -45,7 +77,6 @@ namespace ecommerce.Services
         Email = createUserDTO.Email,
         Password = gethashedPassword,
         UserType = createUserDTO.UserType
-        // LoginStatus = createUserDTO.LoginStatus
       };
 
       _applicationDBContext.Add(user);
@@ -57,7 +88,7 @@ namespace ecommerce.Services
     {
       var user = _applicationDBContext.Users.Where(u => u.Email.ToLower() == userLoginDTO.Email.ToLower()).First();
       var checkHashedPassword = _authService.verifyPassword(user.Password, userLoginDTO.Password);
-      // Console.WriteLine(gethashedPassword);
+      
       if (!checkHashedPassword)
       {
         return null;

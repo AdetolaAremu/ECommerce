@@ -77,18 +77,11 @@ namespace ecommerce.Controllers
       // check login credentials
       var checkLoginCredentials = _userRepository.LoginUser(userLoginDTO);
 
-      _logger.LogInformation(JsonSerializer.Serialize(checkLoginCredentials));
+      // _logger.LogInformation(JsonSerializer.Serialize(checkLoginCredentials));
 
       if (checkLoginCredentials == null) return _responseHelper.ErrorResponseHelper<string>("Login or Email is incorrect");
 
       return _responseHelper.SuccessResponseHelper("User token retrieved successfully", checkLoginCredentials);
-    }
-
-    [HttpPost("upload")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public IActionResult Upload(IFormFile file)
-    {
-      return Ok(file);
     }
   }
 }

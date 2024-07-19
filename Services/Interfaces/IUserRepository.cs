@@ -8,6 +8,12 @@ namespace ecommerce.Services.Interfaces
     // get all users
     IEnumerable<User> GeAllUsers(int pageSize, int pageNumber);
 
+    // get one user
+    User GetOneUser(int userId);
+
+    // change user login feature
+    bool ChangeLoginStatus(int userId, UserDTO userDTO);
+
     // check if user an admin
     bool CheckIfUserIsAnAdmin(int userId);
 
@@ -27,6 +33,6 @@ namespace ecommerce.Services.Interfaces
     bool SaveTransaction();
 
     // get logged In User
-    // User GetLoggedInUser();
+    User GetLoggedInUser();
   }
 }
