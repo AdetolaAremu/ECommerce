@@ -38,7 +38,12 @@ namespace ecommerce.Services.Auth
 
         public string HashPassword(string password)
         {
-        return BCrypt.Net.BCrypt.HashPassword(password);
+            return BCrypt.Net.BCrypt.HashPassword(password);
+        }
+
+        public bool verifyPassword(string hashedPassowrd, string plainPassword)
+        {
+            return BCrypt.Net.BCrypt.Verify(plainPassword, hashedPassowrd);
         }
     }
 }

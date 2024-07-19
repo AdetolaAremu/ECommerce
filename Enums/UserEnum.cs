@@ -1,9 +1,9 @@
 namespace ecommerce.Enums
 {
-  public enum EnumUserType
+  public enum EnumUserType : int
   {
-    Admin,
-    Buyer,
-    Seller
+    Admin=0,
+    Buyer=1,
+    Seller=2
   }
 }

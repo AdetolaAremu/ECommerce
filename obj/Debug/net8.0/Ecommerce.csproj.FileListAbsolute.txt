@@ -145,3 +145,10 @@ C:\Users\adetola\documents\Ecommerce\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnal
 C:\Users\adetola\documents\Ecommerce\bin\Debug\net8.0\BCrypt.Net-Next.dll
 C:\Users\adetola\documents\Ecommerce\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\adetola\documents\Ecommerce\bin\Debug\net8.0\Slugify.Core.dll
+C:\Users\adetola\documents\Ecommerce\bin\Debug\net8.0\Serilog.AspNetCore.dll
+C:\Users\adetola\documents\Ecommerce\bin\Debug\net8.0\Serilog.Extensions.Hosting.dll
+C:\Users\adetola\documents\Ecommerce\bin\Debug\net8.0\Serilog.Extensions.Logging.dll
+C:\Users\adetola\documents\Ecommerce\bin\Debug\net8.0\Serilog.Formatting.Compact.dll
+C:\Users\adetola\documents\Ecommerce\bin\Debug\net8.0\Serilog.Settings.Configuration.dll
+C:\Users\adetola\documents\Ecommerce\bin\Debug\net8.0\Serilog.Sinks.Console.dll
+C:\Users\adetola\documents\Ecommerce\bin\Debug\net8.0\Serilog.Sinks.Debug.dll

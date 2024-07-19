@@ -13,7 +13,7 @@ namespace ecommerce.Models
     public string LastName { get; set; }
     public string Email { get; set; }
     public string Password { get; set; }
-    public bool LoginStatus { get; set; } = false;
+    public bool LoginStatus { get; set; } = true;
     public string? avatar { get; set; }
     public EnumUserType UserType { get; set; } = EnumUserType.Seller;
 

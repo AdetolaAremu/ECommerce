@@ -44,6 +44,7 @@ namespace ecommerce.Services
         LastName = createUserDTO.LastName,
         Email = createUserDTO.Email,
         Password = gethashedPassword,
+        UserType = createUserDTO.UserType
         // LoginStatus = createUserDTO.LoginStatus
       };
 
@@ -55,9 +56,9 @@ namespace ecommerce.Services
     public string LoginUser(UserLoginDTO userLoginDTO)
     {
       var user = _applicationDBContext.Users.Where(u => u.Email.ToLower() == userLoginDTO.Email.ToLower()).First();
-      var gethashedPassword = _authService.HashPassword(userLoginDTO.Password);
-
-      if (user.Password != gethashedPassword)
+      var checkHashedPassword = _authService.verifyPassword(user.Password, userLoginDTO.Password);
+      // Console.WriteLine(gethashedPassword);
+      if (!checkHashedPassword)
       {
         return null;
       }

@@ -7,6 +7,7 @@ using ecommerce.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using Slugify;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -58,6 +59,12 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
     };
 });
+
+Log.Logger = new LoggerConfiguration().MinimumLevel
+    .Information().WriteTo.File("log/log.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 var app = builder.Build();
 

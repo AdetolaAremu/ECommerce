@@ -1,3 +1,4 @@
+using System.Text.Json;
 using ecommerce.DTO;
 using ecommerce.Helpers;
 using ecommerce.Services.Interfaces;
@@ -9,13 +10,15 @@ namespace ecommerce.Controllers
   [Route("/api/auth")]
   public class AuthController : ControllerBase
   {
-    private IUserRepository _userRepository;
-    private ResponseHelper _responseHelper;
+    private readonly IUserRepository _userRepository;
+    private readonly ResponseHelper _responseHelper;
+    private readonly ILogger<AuthController> _logger;
 
-    public AuthController(IUserRepository userRepository, ResponseHelper responseHelper)
+    public AuthController(IUserRepository userRepository, ResponseHelper responseHelper, ILogger<AuthController> logger)
     {
       _userRepository = userRepository;
       _responseHelper = responseHelper;
+      _logger = logger;
     }
 
     [HttpPost("/register")]
@@ -37,7 +40,6 @@ namespace ecommerce.Controllers
       //     avatarPath = filePath; // Set the path or URL to the uploaded file
       //     // Console.ReadLine(avatarPath);
       // }
-
       // if request body is empty
       if (createUserDTO == null) return _responseHelper.ErrorResponseHelper<string>("Request body cannot be empty", null, 422);
 
@@ -74,6 +76,8 @@ namespace ecommerce.Controllers
 
       // check login credentials
       var checkLoginCredentials = _userRepository.LoginUser(userLoginDTO);
+
+      _logger.LogInformation(JsonSerializer.Serialize(checkLoginCredentials));
 
       if (checkLoginCredentials == null) return _responseHelper.ErrorResponseHelper<string>("Login or Email is incorrect");
 
