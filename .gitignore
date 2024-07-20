@@ -2,3 +2,4 @@ appsettings.json
 appsettings.Developement.json
 appsettings.*.json
 log
+uploads/
