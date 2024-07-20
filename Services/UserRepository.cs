@@ -26,9 +26,19 @@ namespace ecommerce.Services
       return _applicationDBContext.Users.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
     }
 
-    public User GetOneUser(int userId)
+    public UserDTO GetOneUser(int userId)
     {
-      return _applicationDBContext.Users.Where(u => u.Id == userId).First();
+      var getOneUser = _applicationDBContext.Users.Where(u => u.Id == userId).First();
+
+      return new UserDTO(){
+        Id = getOneUser.Id,
+        FirstName = getOneUser.FirstName,
+        LastName = getOneUser.LastName,
+        Email = getOneUser.Email,
+        LoginStatus = getOneUser.LoginStatus,
+        UserType = getOneUser.UserType,
+        avatar = getOneUser.avatar,
+      };
     }
 
     public User GetLoggedInUser()
@@ -40,7 +50,7 @@ namespace ecommerce.Services
       return _applicationDBContext.Users.Where(u => u.Email.ToLower() == getUserEmail).First();
     }
 
-    public bool ChangeLoginStatus(int userId, UserDTO userDTO)
+    public bool ChangeLoginStatus(int userId)
     {
       var user = _applicationDBContext.Users.Where(u => u.Id == userId).First();
 
@@ -48,8 +58,8 @@ namespace ecommerce.Services
         user.LoginStatus = false;
       }
 
-      if (user.LoginStatus) {
-        user.LoginStatus = false;
+      if (!user.LoginStatus) {
+        user.LoginStatus = true;
       }
 
       return SaveTransaction();
@@ -100,6 +110,15 @@ namespace ecommerce.Services
     public bool CheckIfEmailExists(string email)
     {
       return _applicationDBContext.Users.Any(u => u.Email.ToLower() == email.ToLower());
+    }
+
+    public bool UploadAvatar(string avatar)
+    {
+      var user = GetLoggedInUser();
+
+      user.avatar = avatar;
+
+      return SaveTransaction();
     }
 
     public bool SaveTransaction()

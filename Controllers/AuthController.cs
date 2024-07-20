@@ -28,18 +28,6 @@ namespace ecommerce.Controllers
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(CreateUserDTO))]
     public IActionResult RegisterUser([FromBody]CreateUserDTO createUserDTO)
     {
-      // string avatarPath = null;
-      // if (avatar != null && avatar.Length > 0)
-      // {
-      //     // You can save the file to the server or process it as needed
-      //     var filePath = Path.Combine("uploads", upload.FileName);
-      //     using (var stream = new FileStream(filePath, FileMode.Create))
-      //     {
-      //         upload.CopyToAsync(stream);
-      //     }
-      //     avatarPath = filePath; // Set the path or URL to the uploaded file
-      //     // Console.ReadLine(avatarPath);
-      // }
       // if request body is empty
       if (createUserDTO == null) return _responseHelper.ErrorResponseHelper<string>("Request body cannot be empty", null, 422);
 

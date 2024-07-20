@@ -9,10 +9,10 @@ namespace ecommerce.Services.Interfaces
     IEnumerable<User> GeAllUsers(int pageSize, int pageNumber);
 
     // get one user
-    User GetOneUser(int userId);
+    UserDTO GetOneUser(int userId);
 
     // change user login feature
-    bool ChangeLoginStatus(int userId, UserDTO userDTO);
+    bool ChangeLoginStatus(int userId);
 
     // check if user an admin
     bool CheckIfUserIsAnAdmin();
@@ -28,6 +28,9 @@ namespace ecommerce.Services.Interfaces
 
     // check if user exists
     bool CheckIfUserExist(int userId);
+
+    // avatar upload
+    bool UploadAvatar(string avatar);
 
     // save transaction
     bool SaveTransaction();

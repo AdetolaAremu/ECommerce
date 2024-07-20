@@ -1,3 +1,4 @@
+using ecommerce.DTO;
 using ecommerce.Helpers;
 using ecommerce.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -7,7 +8,7 @@ namespace ecommerce.Controllers
 {
   [Authorize]
   [ApiController]
-  [Route("/api/user")]
+  [Route("/api/users")]
   public class UserController : ControllerBase
   {
     private IUserRepository _userRepository;
@@ -37,7 +38,7 @@ namespace ecommerce.Controllers
     }
 
     // get all users
-    [HttpGet("/all-users")]
+    [HttpGet("/all")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -55,10 +56,66 @@ namespace ecommerce.Controllers
     }
 
     // get one user
-    // public IActionResult GetOneUser() {}
+    [HttpGet("/user")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDTO))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public IActionResult GetOneUser([FromQuery] int userId)
+    {
+      if (!_userRepository.CheckIfUserIsAnAdmin()) return _responseHelper.ErrorResponseHelper<string>("User is not an admin", null, 401);
+
+      if (!_userRepository.CheckIfUserExist(userId)) return _responseHelper.ErrorResponseHelper<string>("User does not exist", null, 404);
+
+      var user = _userRepository.GetOneUser(userId);
+
+      if (!ModelState.IsValid) return _responseHelper.ErrorResponseHelper<string>($"Bad request {ModelState}");
+
+      return _responseHelper.SuccessResponseHelper("User retrieved successfully", user);
+    }
 
     // upload image
+    [HttpPut("/avatar")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public IActionResult UploadImage(IFormFile avatar, [FromQuery] int userId)
+    {
+      string avatarPath = null;
+      if (avatar != null && avatar.Length > 0)
+      {
+        var filePath = Path.Combine("uploads", avatar.FileName);
+        
+        using (var stream = new FileStream(filePath, FileMode.Create)) avatar.CopyToAsync(stream);
+        
+        avatarPath = filePath;
+      }
 
-    // change user login status
-  } 
+      var saveAvatarPath = _userRepository.UploadAvatar(avatarPath);
+
+      if (!ModelState.IsValid) return _responseHelper.ErrorResponseHelper<string>($"Bad request {ModelState}");
+
+      if (!saveAvatarPath) return _responseHelper.ErrorResponseHelper<string>("image not saved", null, 400);
+          
+      return _responseHelper.SuccessResponseHelper<string>("User avatar updated successfully", null);
+    }
+
+    [HttpPut("/toggle-status/{userId}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public IActionResult ToggleLoginStatus(int userId)
+    {
+      if (!_userRepository.CheckIfUserIsAnAdmin()) return _responseHelper.ErrorResponseHelper<string>("User is not an admin", null, 401);
+
+      if (!_userRepository.CheckIfUserExist(userId)) return _responseHelper.ErrorResponseHelper<string>("User does not exit", null, 404);
+
+      if (!ModelState.IsValid) return _responseHelper.ErrorResponseHelper<string>($"Bad request {ModelState}");
+
+      var toggleStatus = _userRepository.ChangeLoginStatus(userId);
+
+      if (!toggleStatus) return _responseHelper.ErrorResponseHelper<string>("Error while attempting to toggle status");
+
+      return _responseHelper.SuccessResponseHelper<string>("Status toggled successfully", null);
+    }
+  }
 }
