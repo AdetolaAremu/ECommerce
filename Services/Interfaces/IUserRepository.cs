@@ -15,7 +15,7 @@ namespace ecommerce.Services.Interfaces
     bool ChangeLoginStatus(int userId, UserDTO userDTO);
 
     // check if user an admin
-    bool CheckIfUserIsAnAdmin(int userId);
+    bool CheckIfUserIsAnAdmin();
 
     // register a new user
     bool Register(CreateUserDTO createUserDTO);

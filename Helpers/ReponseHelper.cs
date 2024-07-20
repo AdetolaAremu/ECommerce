@@ -1,13 +1,21 @@
+using System.Runtime.Serialization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ecommerce.Helpers
 {
+  [DataContract]
   public class ResponseHelper
   {
+    [DataContract]
     private class SuccesResponseModel<T>
     {
+      [DataMember]
       public string Status { get; set; }
+
+      [DataMember]
       public string Message { get; set; }
+
+      [DataMember]
       public T Data { get; set; }
     }
 
@@ -23,10 +31,16 @@ namespace ecommerce.Helpers
       return new ObjectResult(successResponse) { StatusCode = statusCode };
     }
 
+    [DataContract]
     private class ErrorResponseModel<T>
     {
+      [DataMember]
       public string Status { get; set; }
+
+      [DataMember]
       public string Message { get; set; }
+
+      [DataMember]
       public T? Error { get; set; }
     }
 

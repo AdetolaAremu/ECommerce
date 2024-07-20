@@ -33,11 +33,11 @@ namespace ecommerce.Services
 
     public User GetLoggedInUser()
     {
-      var getUserId = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var getUserEmail = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      
+      if (String.IsNullOrEmpty(getUserEmail)) return null;
 
-      if (String.IsNullOrEmpty(getUserId)) return null;
-
-      return GetOneUser(int.Parse(getUserId));
+      return _applicationDBContext.Users.Where(u => u.Email.ToLower() == getUserEmail).First();
     }
 
     public bool ChangeLoginStatus(int userId, UserDTO userDTO)
@@ -55,11 +55,11 @@ namespace ecommerce.Services
       return SaveTransaction();
     }
 
-    public bool CheckIfUserIsAnAdmin(int userId)
+    public bool CheckIfUserIsAnAdmin()
     {
-      var user = _applicationDBContext.Users.Where(u => u.Id == userId).First();
-
-      return user.UserType == Enums.EnumUserType.Admin ? true : false;
+      var user = GetLoggedInUser();
+      
+      return user.UserType == 0 ? true : false;
     }
 
     public bool CheckIfUserExist(int userId)
