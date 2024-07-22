@@ -14,13 +14,13 @@ namespace ecommerce.Services
       _applicationDBContext = applicationDBContext;
     }
 
-    public IEnumerable<Category> GetAllCategories(string searchTerm)
+    public IEnumerable<Category> GetAllCategories(string? searchTerm=null)
     {
       var query = _applicationDBContext.Categories.AsQueryable();
-
+      
       if (!string.IsNullOrEmpty(searchTerm))
       {
-        query = query.Where(c => c.Name.ToLower() == searchTerm.ToLower());
+        query = query.Where(c => c.Name.ToLower().Contains(searchTerm.ToLower()));
       }
 
       return query.ToList();

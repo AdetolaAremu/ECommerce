@@ -14,15 +14,16 @@ namespace ecommerce.Controllers
     private ICategoryRepository _categoryRepository;
     private ResponseHelper _responseHelper;
 
-    public CategoryController(ICategoryRepository categoryRepository)
+    public CategoryController(ICategoryRepository categoryRepository, ResponseHelper responseHelper)
     {
       _categoryRepository = categoryRepository;
+      _responseHelper = responseHelper;
     }
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult GetAllCategories([FromQuery] string searchTerm)
+    public IActionResult GetAllCategories([FromQuery] string? searchTerm)
     {
       var categories = _categoryRepository.GetAllCategories(searchTerm);
 
@@ -86,6 +87,10 @@ namespace ecommerce.Controllers
       return _responseHelper.SuccessResponseHelper<string>("Category updated successfully", null);
     }
 
+    [HttpDelete("/{categoryId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public IActionResult DeleteCategory(int categoryId)
     {
       if (!_categoryRepository.CategoryExists(categoryId)) return _responseHelper.ErrorResponseHelper<string>("Category does not exist", null, 404);

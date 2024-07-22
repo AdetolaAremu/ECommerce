@@ -6,7 +6,7 @@ namespace ecommerce.Services.Interfaces
   public interface ICategoryRepository
   {
     // get all categories. Search param
-    IEnumerable<Category> GetAllCategories(string searchTerm);
+    IEnumerable<Category> GetAllCategories(string? searchTerm);
 
     // get Once Category
     Category GetOneCategory(int categoryId);
