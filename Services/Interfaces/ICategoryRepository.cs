@@ -14,6 +14,12 @@ namespace ecommerce.Services.Interfaces
     // check if category exists
     bool CategoryExists(int categoryId);
 
+    // bool check if category name exists
+    bool CheckIfCategoryNameExists(string name);
+
+    // check if update category name exists
+    bool CheckIfUpdateCategoryNameExists(int categoryId, string name);
+
     // Create category
     bool CreateCategory(CreateCategoryDTO createCategoryDTO);
 

@@ -36,6 +36,16 @@ namespace ecommerce.Services
       return _applicationDBContext.Categories.Any(c => c.Id == categoryId);
     }
 
+    public bool CheckIfCategoryNameExists(string name)
+    {
+      return _applicationDBContext.Categories.Any(c => c.Name.ToLower() == name.ToLower());
+    }
+
+    public bool CheckIfUpdateCategoryNameExists(int categoryId, string name)
+    {
+      return _applicationDBContext.Categories.Any(c => c.Name.ToLower() == name.ToLower() && c.Id != categoryId); 
+    }
+
     public bool CreateCategory(CreateCategoryDTO createCategoryDTO)
     {
       var category = new Category(){

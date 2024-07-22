@@ -4,11 +4,11 @@ using ecommerce.Services.Interfaces;
 
 namespace ecommerce.Services
 {
-  public class CategeoryUsageRepository : ICategoryUsageRepository
+  public class CouponUsageRepository : ICouponUsageRepository
   {
     private ApplicationDBContext _applicationDbContext;
 
-    public CategeoryUsageRepository(ApplicationDBContext applicationDBContext)
+    public CouponUsageRepository(ApplicationDBContext applicationDBContext)
     {
       _applicationDbContext = applicationDBContext;
     }

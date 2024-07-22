@@ -3,7 +3,7 @@ using ecommerce.Models;
 
 namespace ecommerce.Services.Interfaces
 {
-  public interface ICategoryUsageRepository
+  public interface ICouponUsageRepository
   {
     // get all coupon usages
     IEnumerable<CouponUsage> GetAllCouponUsages(string searchTerm, int pageSize, int pageNumber);

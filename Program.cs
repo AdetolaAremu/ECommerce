@@ -31,7 +31,7 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<ISlugService, SlugService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-builder.Services.AddScoped<ICategoryUsageRepository, CategeoryUsageRepository>();
+builder.Services.AddScoped<ICouponUsageRepository, CouponUsageRepository>();
 builder.Services.AddScoped<ICouponRepository, CouponRepository>();
 builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 builder.Services.AddScoped<IOrderRespository, OrderRepository>();
