@@ -57,7 +57,7 @@ namespace ecommerce.Services
       return SaveTransaction();
     }
 
-    public bool UpdateCategory(int categoryId, CategoryDTO categoryDTO)
+    public bool UpdateCategory(int categoryId, CreateCategoryDTO categoryDTO)
     {
       var getCategory = _applicationDBContext.Categories.Where(c => c.Id == categoryId).First();
 

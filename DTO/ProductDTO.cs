@@ -11,7 +11,7 @@ namespace ecommerce.DTO
     [StringLength(250)]
     public string Title { get; set; }
 
-     [Required]
+    [Required]
     [StringLength(100, MinimumLength=10, ErrorMessage = "Description must not be less than 10 characters and cannot  be more than 1000 characters")]
     public string Description { get; set; }
 
@@ -25,11 +25,11 @@ namespace ecommerce.DTO
     [Required]
     public int Quantity { get; set; }
 
-    [Required]
-    public string CoverImage { get; set; }
+    // [Required]
+    // public string CoverImage { get; set; }
 
-    [Required]
-    public ICollection<string> Images { get; set; }
+    // [Required]
+    // public ICollection<string> Images { get; set; }
 
     [Required]
     [StringLength(250)]
@@ -65,11 +65,11 @@ namespace ecommerce.DTO
     [Required]
     public int Quantity { get; set; }
 
-    [Required]
-    public string CoverImage { get; set; }
+    // [Required]
+    // public string CoverImage { get; set; }
 
-    [Required]
-    public ICollection<string> Images { get; set; }
+    // [Required]
+    // public ICollection<string> Images { get; set; }
 
     [Required]
     [StringLength(250)]
@@ -78,8 +78,8 @@ namespace ecommerce.DTO
     [Required]
     public int UserId { get; set; }
 
-    public ICollection<int> categoryIds { get; set; }
+    public ICollection<int> CategoryIds { get; set; }
 
-    public string Slug { get; set; } // will be generated
+    // public string Slug { get; set; } // will be generated
   }
 }

@@ -33,13 +33,6 @@ namespace ecommerce.DTO
     [EmailAddress]
     public string Email { get; set; }
 
-    // [Required]
-    // [StringLength(200)]
-    // public bool LoginStatus { get; set; }
-
-    // [Required]
-    // public string? avatar { get; set; }
-
     [Required]
     public EnumUserType UserType { get; set; }
   }

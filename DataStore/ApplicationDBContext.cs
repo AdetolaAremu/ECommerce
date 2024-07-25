@@ -19,6 +19,7 @@ namespace ecommerce.DataStore
     public DbSet<ShoppingCart> ShoppingCarts { get; set; }
     public DbSet<CartItem> CartItems { get; set; }
     public DbSet<Tag> Tags { get; set; }
+    public DbSet<ProductImages> ProductImages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -71,6 +72,12 @@ namespace ecommerce.DataStore
 
       modelBuilder.Entity<Product>()
         .HasMany(c => c.Coupons)
+        .WithOne(p => p.Product)
+        .HasForeignKey(p => p.ProductId)
+        .OnDelete(DeleteBehavior.Cascade);
+
+      modelBuilder.Entity<Product>()
+        .HasMany(pi => pi.ProductImages)
         .WithOne(p => p.Product)
         .HasForeignKey(p => p.ProductId)
         .OnDelete(DeleteBehavior.Cascade);

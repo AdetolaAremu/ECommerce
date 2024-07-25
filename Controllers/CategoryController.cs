@@ -68,10 +68,10 @@ namespace ecommerce.Controllers
     }
 
     [HttpPut("/{categoryId}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CreateCategoryDTO))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public IActionResult UpdateCategory(int categoryId, CategoryDTO categoryDTO)
+    public IActionResult UpdateCategory(int categoryId, CreateCategoryDTO categoryDTO)
     {
       if (categoryDTO == null) return _responseHelper.ErrorResponseHelper<string>("Request body cannot be empty");
 

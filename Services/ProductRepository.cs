@@ -18,13 +18,13 @@ namespace ecommerce.Services
       _slugService = slugService;
     }
 
-    public IEnumerable<Product> GetAllProducts(string searchTerm, string sortBy, int pageNumber, int itemSize=20)
+    public IEnumerable<Product> GetAllProducts(string? searchTerm, string? sortBy, int pageNumber, int itemSize)
     {
       var query = _applicationDBContext.Products.AsQueryable();
 
       if (!string.IsNullOrEmpty(searchTerm))
       {
-        query = query.Where(p => p.Title.ToLower().Contains(searchTerm) || p.Description.ToLower().Contains(searchTerm));
+        query = query.Where(p => p.Title.ToLower().Contains(searchTerm.ToLower()) || p.Description.ToLower().Contains(searchTerm.ToLower()));
       }
 
       if (!string.IsNullOrEmpty(sortBy))
@@ -48,6 +48,7 @@ namespace ecommerce.Services
             break;
         }
       }
+      // Console.WriteLine(query);
 
       return query.Skip((pageNumber - 1) * itemSize).Take(itemSize).ToList();
     }
@@ -57,7 +58,7 @@ namespace ecommerce.Services
       return _applicationDBContext.Products.Where(p => p.Id == productId).Include(p => p.Reviews).First();
     }
 
-    public bool CreateProduct(CreateProductDTO createProductDTO) 
+    public bool CreateProduct(CreateProductDTO createProductDTO, string coverImage, List<string> productImages) 
     {
       var createProduct = new Product() {
         Title = createProductDTO.Title,
@@ -65,23 +66,36 @@ namespace ecommerce.Services
         Price = createProductDTO.Price,
         SKU = createProductDTO.SKU,
         Quantity = createProductDTO.Quantity,
-        CoverImage = createProductDTO.CoverImage,
-        Images = createProductDTO.Images,
+        CoverImage = coverImage,
         Manufacturer = createProductDTO.Manufacturer,
-        Slug = _slugService.GenerateSlug(createProductDTO.Title)
+        Slug = _slugService.GenerateSlug(createProductDTO.Title),
+        UserId = createProductDTO.UserId
       };
 
       _applicationDBContext.Add(createProduct);
-      var savePRoduct = SaveTransaction();
+      var saveProduct = SaveTransaction();
 
-      if (savePRoduct == true) {
-        foreach (var category in createProductDTO.categoryIds)
+      if (saveProduct == true) {
+          // Console.WriteLine(createProductDTO);
+
+        foreach (var category in createProductDTO.CategoryIds)
         {
           var newCategories = new ProductCategory(){
             CategoryId = category,
             ProductId = createProduct.Id
           };
+
           _applicationDBContext.Add(newCategories);
+        }
+
+        foreach(var image in productImages)
+        {
+          var newImages = new ProductImages(){
+            Image = image,
+            ProductId = createProduct.Id
+          };
+
+          _applicationDBContext.Add(newImages);
         }
 
         return SaveTransaction();
@@ -95,14 +109,13 @@ namespace ecommerce.Services
       var product = _applicationDBContext.Products.Where(p => p.Id == productId).First();
 
       var updatedProduct = new Product(){
-        Title = productDTO.Title,
-        Description = productDTO.Description,
+        Title = productDTO.Title.ToLower(),
+        Description = productDTO.Description.ToLower(),
         Price = productDTO.Price,
         SKU = productDTO.SKU,
         Quantity = productDTO.Quantity,
-        CoverImage = productDTO.CoverImage,
-        Images = productDTO.Images,
-        Manufacturer = productDTO.Manufacturer,
+        // CoverImage = productDTO.CoverImage,
+        Manufacturer = productDTO.Manufacturer.ToLower(),
         Slug = !string.IsNullOrEmpty(productDTO.Title) ? _slugService.GenerateSlug(productDTO.Title) : productDTO.Slug
       };
 

@@ -14,7 +14,6 @@ namespace ecommerce.Models
     public string SKU { get; set; }
     public int Quantity { get; set; }
     public string CoverImage { get; set; }
-    public ICollection<string> Images { get; set; }
     public string Manufacturer { get; set; }
     public string Slug { get; set; }
 
@@ -24,6 +23,7 @@ namespace ecommerce.Models
     public int UserId { get; set; }
     public User User { get; set; }
     public ICollection<ProductCategory> ProductCategories { get; set; }
+    public ICollection<ProductImages> ProductImages { get; set; }
     public Discount Discount { get; set; }
     public ICollection<Coupon> Coupons { get; set; }
     public ICollection<CouponUsage> CouponUsages { get; set; }

@@ -24,7 +24,7 @@ namespace ecommerce.Services.Interfaces
     bool CreateCategory(CreateCategoryDTO createCategoryDTO);
 
     // update category
-    bool UpdateCategory(int categoryId, CategoryDTO categoryDTO);
+    bool UpdateCategory(int categoryId, CreateCategoryDTO createCategoryDTO);
 
     // delete category
     bool DeleteCategory(Category category);

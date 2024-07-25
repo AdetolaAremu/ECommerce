@@ -77,7 +77,7 @@ namespace ecommerce.Controllers
     [HttpPut("/avatar")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult UploadImage(IFormFile avatar, [FromQuery] int userId)
+    public IActionResult UploadImage(IFormFile avatar)
     {
       string avatarPath = null;
       if (avatar != null && avatar.Length > 0)
