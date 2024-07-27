@@ -44,5 +44,58 @@ namespace ecommerce.Helpers
 
       return bulkImages.ToArray();
     }
+
+    public bool DeleteImages(List<string> paths)
+    {
+      try
+      {
+        int count = 0;
+
+        foreach (var item in paths)
+        {
+          var getPath = File.Exists(item);
+
+          if (getPath) count++;
+        }
+
+        if (count == paths.Count()) {
+          foreach (var pathsToDelete in paths)
+          {
+            File.Delete(pathsToDelete);
+          }
+
+          return true;
+        } else {
+          Console.WriteLine("One or more files not found");
+          return false;
+        }
+      }
+      catch (Exception e)
+      {
+        Console.WriteLine(e);
+        return false;
+      }
+    }
+
+    public bool DeleteSingleImage(string path)
+    {
+      try
+      {
+        if (File.Exists(path)) {
+          File.Delete(path);
+
+          return true;
+        } else {
+          Console.WriteLine("Cannot delete empty path");
+
+          return false;
+        }
+      }
+      catch (Exception e)
+      {
+        Console.WriteLine(e);
+        return false;
+      }
+    }
   }
 }

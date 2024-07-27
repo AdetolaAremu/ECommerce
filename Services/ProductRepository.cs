@@ -11,11 +11,13 @@ namespace ecommerce.Services
   {
     private ApplicationDBContext _applicationDBContext;
     private readonly ISlugService _slugService;
+    private Helper _helper;
 
-    public ProductRepository(ApplicationDBContext applicationDBContext, ISlugService slugService)
+    public ProductRepository(ApplicationDBContext applicationDBContext, ISlugService slugService, Helper helper)
     {
       _applicationDBContext = applicationDBContext;
       _slugService = slugService;
+      _helper = helper;
     }
 
     public IEnumerable<Product> GetAllProducts(string? searchTerm, string? sortBy, int pageNumber, int itemSize)
@@ -76,8 +78,6 @@ namespace ecommerce.Services
       var saveProduct = SaveTransaction();
 
       if (saveProduct == true) {
-          // Console.WriteLine(createProductDTO);
-
         foreach (var category in createProductDTO.CategoryIds)
         {
           var newCategories = new ProductCategory(){
@@ -104,31 +104,48 @@ namespace ecommerce.Services
       }
     }
 
-    public bool UpdateProduct(ProductDTO productDTO, int productId)
+    public bool UpdateProduct(CreateProductDTO productDTO, int productId, string? coverImage, List<string?> productImages)
     {
       var product = _applicationDBContext.Products.Where(p => p.Id == productId).First();
 
-      var updatedProduct = new Product(){
-        Title = productDTO.Title.ToLower(),
-        Description = productDTO.Description.ToLower(),
-        Price = productDTO.Price,
-        SKU = productDTO.SKU,
-        Quantity = productDTO.Quantity,
-        // CoverImage = productDTO.CoverImage,
-        Manufacturer = productDTO.Manufacturer.ToLower(),
-        Slug = !string.IsNullOrEmpty(productDTO.Title) ? _slugService.GenerateSlug(productDTO.Title) : productDTO.Slug
-      };
+      product.Title = productDTO.Title.ToLower();
+      product.Description = productDTO.Description.ToLower();
+      product.Price = productDTO.Price;
+      product.SKU = productDTO.SKU;
+      product.Quantity = productDTO.Quantity;
+      product.CoverImage = coverImage ?? product.CoverImage;
+      product.Manufacturer = productDTO.Manufacturer.ToLower();
+      product.Slug = !string.IsNullOrEmpty(productDTO.Title) ? _slugService.GenerateSlug(productDTO.Title) : product.Slug;
+
+      // what if it contains images
+      if (productImages.Any())
+      {
+        // delete all previous images
+        var deleteImages = _helper.DeleteImages(productImages);
+
+        if (deleteImages) {
+          foreach (var newImages in productImages)
+          {
+            var savedImages = new ProductImages(){
+              Image = newImages,
+              ProductId = productId
+            };
+            _applicationDBContext.Add(savedImages);
+          }
+        }
+      }
 
       // delete the previous categories and create new ones
-      if (productDTO.categoryIds.Any())
+      if (productDTO.CategoryIds.Any())
       {
         var categoriesToDelete = _applicationDBContext.ProductCategories.Where(pc => pc.ProductId == productId).ToList();
         _applicationDBContext.RemoveRange(categoriesToDelete);
+        SaveTransaction();
 
-        foreach (var category in productDTO.categoryIds)
+        foreach (var category in productDTO.CategoryIds)
         {
           var newCategories = new ProductCategory(){
-            ProductId = updatedProduct.Id,
+            ProductId = productId,
             CategoryId = category
           };
 
@@ -147,7 +164,29 @@ namespace ecommerce.Services
 
     public bool DeleteProduct(Product product)
     {
+      // delete cover image
+      _helper.DeleteSingleImage("uploads/product-cover-image/" + product.CoverImage);
+
+      // delete categories
+      var getProductCategory = _applicationDBContext.ProductCategories.Where(pc => pc.ProductId == product.Id).ToList();
+
+      foreach (var productCatgory in getProductCategory)
+      {        
+        _applicationDBContext.Remove(productCatgory);
+      }
+
+      // delete product images
+      var getProductimages = _applicationDBContext.ProductImages.Where(pi => pi.ProductId == product.Id).ToList();
+
+      foreach (var productImages in getProductimages)
+      {
+        _helper.DeleteSingleImage("uploads/product-images/" + productImages.Image);
+
+        _applicationDBContext.Remove(productImages);
+      }
+
       _applicationDBContext.Remove(product);
+
       return SaveTransaction();
     }
 

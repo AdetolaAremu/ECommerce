@@ -79,18 +79,32 @@ namespace ecommerce.Services
       return _responseHelper.SuccessResponseHelper("Product created successfully", product, 201);
     }
 
+    [Authorize]
     [HttpPut("/{productId}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult UpdateProduct(int productId, [FromBody] ProductDTO productDTO)
+    public async Task<IActionResult> UpdateProduct(int productId, [FromForm] CreateProductDTO productDTO, IFormFile? coverImage, IFormFile?[] images)
     {
       if (productDTO == null) return _responseHelper.ErrorResponseHelper<string>("Request body can not be empty");
 
       if (!_productRepository.CheckIfProductExists(productId))
         return _responseHelper.ErrorResponseHelper<string>("Product does not exist", null, 404);
 
-      var updateProduct = _productRepository.UpdateProduct(productDTO, productId);
+      string coverImageUpload = null;
+      if (coverImage != null) {
+        coverImageUpload = _helper.SingleImageUpload(coverImage, "uploads/product-cover-image");
+      }
+
+      List<string> bulkImageUpload = new List<string>();
+      if (images.Any())
+      {
+        var nonNullableImages = images.Where(img => img != null).Cast<IFormFile>().ToArray();
+        var bulkImageUploadArray = await _helper.BulkImageUpload(nonNullableImages, "uploads/product-images");
+        bulkImageUpload = bulkImageUploadArray.ToList();
+      }
+
+      var updateProduct = _productRepository.UpdateProduct(productDTO, productId, coverImageUpload, bulkImageUpload);
 
       if (!ModelState.IsValid) return _responseHelper.ErrorResponseHelper("An error occurred", ModelState);
 
@@ -116,7 +130,7 @@ namespace ecommerce.Services
     }
 
     [Authorize]
-    [HttpDelete("/{productId}")]
+    [HttpDelete("{productId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

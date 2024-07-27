@@ -25,8 +25,8 @@ namespace ecommerce.DTO
     [Required]
     public int Quantity { get; set; }
 
-    // [Required]
-    // public string CoverImage { get; set; }
+    [Required]
+    public string CoverImage { get; set; }
 
     // [Required]
     // public ICollection<string> Images { get; set; }
@@ -65,12 +65,6 @@ namespace ecommerce.DTO
     [Required]
     public int Quantity { get; set; }
 
-    // [Required]
-    // public string CoverImage { get; set; }
-
-    // [Required]
-    // public ICollection<string> Images { get; set; }
-
     [Required]
     [StringLength(250)]
     public string Manufacturer { get; set; }
@@ -79,7 +73,5 @@ namespace ecommerce.DTO
     public int UserId { get; set; }
 
     public ICollection<int> CategoryIds { get; set; }
-
-    // public string Slug { get; set; } // will be generated
   }
 }

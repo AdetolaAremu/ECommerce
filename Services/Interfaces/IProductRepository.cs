@@ -18,7 +18,7 @@ namespace ecommerce.Services.Interfaces
     bool CreateProduct(CreateProductDTO createProductDTO, string coverImage, List<string> productImages);
 
     // update product
-    bool UpdateProduct(ProductDTO productDTO, int productId);
+    bool UpdateProduct(CreateProductDTO productDTO, int productId, string? coverImage, List<string?> productImages);
 
     // delete product
     bool DeleteProduct(Product product);
