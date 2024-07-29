@@ -12,6 +12,10 @@ namespace ecommerce.Services.Interfaces
 
     IEnumerable<Coupon> GetAllCouponsPerProduct(int ProductId, int pageSize, int pageNumber);
 
+    Coupon CheckCouponCode(string code, int productId);
+
+    bool CheckCouponExpiry(Coupon coupon);
+
     bool CouponExists(int couponId);
     
     bool CreateCoupon(CreateCouponDTO createCouponDTO);

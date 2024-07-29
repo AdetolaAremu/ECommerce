@@ -1,6 +1,7 @@
 using ecommerce.DataStore;
 using ecommerce.DTO;
 using ecommerce.Models;
+using ecommerce.Services.Auth;
 using ecommerce.Services.Interfaces;
 
 namespace ecommerce.Services
@@ -8,10 +9,12 @@ namespace ecommerce.Services
   public class CouponRepository : ICouponRepository
   {
     private ApplicationDBContext _applicationDBContext;
+    private AuthService _authService;
 
-    public CouponRepository(ApplicationDBContext applicationDBContext)
+    public CouponRepository(ApplicationDBContext applicationDBContext, AuthService authService)
     {
       _applicationDBContext = applicationDBContext;
+      _authService = authService;
     }
 
     public IEnumerable<Coupon> GetAllCoupons(int pageSize, int pageNumber)
@@ -40,8 +43,10 @@ namespace ecommerce.Services
 
     public bool CreateCoupon(CreateCouponDTO createCouponDTO)
     {
+      var hashedCouponCode = _authService.HashString(createCouponDTO.Code);
+
       var coupon = new Coupon(){
-        Code = createCouponDTO.Code,
+        Code = hashedCouponCode,
         ProductId = createCouponDTO.ProductId,
         DiscountStarts = createCouponDTO.DiscountStarts,
         DiscountEnds = createCouponDTO.DiscountEnds,
@@ -61,6 +66,36 @@ namespace ecommerce.Services
       coupon.DiscountEnds = couponDTO.DiscountEnds;
 
       return SaveTransaction();
+    }
+
+    public Coupon CheckCouponCode(string code, int productId)
+    {
+      var getCoupon = _applicationDBContext.Coupons.Where(c => c.ProductId == productId).ToList();
+      
+      bool couponCorrect = false;
+      Coupon currentCoupon = new Coupon{};
+
+      foreach (var coupon in getCoupon)
+      {
+        if (_authService.verifyHashedString(coupon.Code, code)) {
+          currentCoupon = coupon;
+          couponCorrect = true;
+          break;
+        }
+      }
+
+      if (couponCorrect) {
+        return currentCoupon;
+      } else {
+        return null;
+      }
+    }
+
+    public bool CheckCouponExpiry(Coupon coupon)
+    {
+      var today = DateTime.Now;
+
+      return today > coupon.DiscountEnds ? true : false;
     }
 
     public bool DeleteCoupon(Coupon coupon)

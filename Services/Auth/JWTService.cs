@@ -36,12 +36,12 @@ namespace ecommerce.Services.Auth
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public string HashPassword(string password)
+        public string HashString(string password)
         {
             return BCrypt.Net.BCrypt.HashPassword(password);
         }
 
-        public bool verifyPassword(string hashedPassowrd, string plainPassword)
+        public bool verifyHashedString(string hashedPassowrd, string plainPassword)
         {
             return BCrypt.Net.BCrypt.Verify(plainPassword, hashedPassowrd);
         }

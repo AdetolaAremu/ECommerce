@@ -79,7 +79,7 @@ namespace ecommerce.Services
 
     public bool Register(CreateUserDTO createUserDTO)
     {
-      var gethashedPassword = _authService.HashPassword(createUserDTO.Password);
+      var gethashedPassword = _authService.HashString(createUserDTO.Password);
 
       var user = new User(){
         FirstName = createUserDTO.FirstName,
@@ -97,7 +97,7 @@ namespace ecommerce.Services
     public string LoginUser(UserLoginDTO userLoginDTO)
     {
       var user = _applicationDBContext.Users.Where(u => u.Email.ToLower() == userLoginDTO.Email.ToLower()).First();
-      var checkHashedPassword = _authService.verifyPassword(user.Password, userLoginDTO.Password);
+      var checkHashedPassword = _authService.verifyHashedString(user.Password, userLoginDTO.Password);
       
       if (!checkHashedPassword)
       {

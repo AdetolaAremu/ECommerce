@@ -1,11 +1,13 @@
 using ecommerce.DTO;
 using ecommerce.Helpers;
 using ecommerce.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ecommerce.Controllers
 {
   [ApiController]
+  [Authorize]
   [Route("/api/coupons")]
   public class CouponController : ControllerBase
   {
@@ -58,11 +60,13 @@ namespace ecommerce.Controllers
     {
       if (!_userRepository.CheckIfUserIsAnAdmin()) return _responseHelper.ErrorResponseHelper<string>("User is not an admin", null, 401);
 
+      if (!_productRepository.CheckIfProductExists(createCouponDTO.ProductId)) return _responseHelper.ErrorResponseHelper<string>("Product does not exist", null, 404);
+
       if (createCouponDTO == null) return _responseHelper.ErrorResponseHelper<string>("Request body is empty");    
 
       var createCoupon = _couponRepository.CreateCoupon(createCouponDTO);
 
-      if (!ModelState.IsValid) return _responseHelper.ErrorResponseHelper("An error occurred", ModelState);
+      if (!ModelState.IsValid) return _responseHelper.ErrorResponseHelper("An error occurred", ModelState, 500);
 
       if (!createCoupon) return _responseHelper.ErrorResponseHelper<string>("Unable to create coupon due to some issues", null, 500);
 
@@ -84,11 +88,17 @@ namespace ecommerce.Controllers
 
       var couponUpdate = _couponRepository.UpdateCoupon(couponId, couponDTO);
 
+      if (!ModelState.IsValid) return _responseHelper.ErrorResponseHelper("An error occurred", ModelState, 500);
+
       if (!couponUpdate) return _responseHelper.ErrorResponseHelper<string>("Unable to create coupon due to some issues", null, 500);
 
       return _responseHelper.SuccessResponseHelper<string>("Coupon updated successfully", null);
     }
 
+    [HttpGet("coupos/product/{productId}")]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public IActionResult GetCouponsForAProduct(int productId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
       if (!_userRepository.CheckIfUserIsAnAdmin()) return _responseHelper.ErrorResponseHelper<string>("User is not an admin", null, 401);
@@ -103,8 +113,15 @@ namespace ecommerce.Controllers
       return _responseHelper.SuccessResponseHelper("Coupons retrieved successfully", coupons);
     }
 
+    [HttpDelete("/{couponId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public IActionResult DeleteProduct(int couponId)
     {
+      if (!_userRepository.CheckIfUserIsAnAdmin()) return _responseHelper.ErrorResponseHelper<string>("User is not an admin", null, 401);
+
       if (!_couponRepository.CouponExists(couponId)) return _responseHelper.ErrorResponseHelper<string>("Coupon does not exist", null, 404);
 
       var coupon = _couponRepository.GetOneCoupon(couponId);
@@ -114,6 +131,30 @@ namespace ecommerce.Controllers
       if (!deleteCoupon) return _responseHelper.ErrorResponseHelper<string>("Unable to delete coupon due to some issues", null, 500);
 
       return _responseHelper.SuccessResponseHelper<string>("Coupon deleted successfully", null);
+    }
+
+    // we will need this when we are about to checkout too
+    [HttpGet("/validity")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public IActionResult CheckCouponValidity([FromQuery] int productId, string code)
+    {
+      // check if product exists
+      if (!_productRepository.CheckIfProductExists(productId)) return _responseHelper.ErrorResponseHelper<string>("Product does not exist", null, 404);
+
+      // check if any coupon matches the incoming code
+      var checkCoupon = _couponRepository.CheckCouponCode(code, productId);
+
+      if (checkCoupon == null) return _responseHelper.ErrorResponseHelper<string>("Coupon code is not correct or does not exist");
+
+      // check expiry
+      if (!_couponRepository.CheckCouponExpiry(checkCoupon)) return _responseHelper.ErrorResponseHelper<string>("Coupon has expired");
+
+      if (!ModelState.IsValid) return _responseHelper.ErrorResponseHelper("An error occurred", ModelState, 500);
+
+      return _responseHelper.SuccessResponseHelper<string>("Coupon is valid", null);
     }
   }
 }
