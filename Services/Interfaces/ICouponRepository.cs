@@ -6,7 +6,7 @@ namespace ecommerce.Services.Interfaces
 {
   public interface ICouponRepository
   {
-    IEnumerable<Coupon> GetAllCoupons(string searchTerm, int pageSize, int pageNumber);
+    IEnumerable<Coupon> GetAllCoupons(int pageSize, int pageNumber);
 
     Coupon GetOneCoupon(int couponId);
 

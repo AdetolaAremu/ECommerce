@@ -14,16 +14,9 @@ namespace ecommerce.Services
       _applicationDBContext = applicationDBContext;
     }
 
-    public IEnumerable<Coupon> GetAllCoupons(string searchTerm, int pageSize, int pageNumber)
+    public IEnumerable<Coupon> GetAllCoupons(int pageSize, int pageNumber)
     {
-      var query = _applicationDBContext.Coupons.AsQueryable();
-
-      if (!string.IsNullOrEmpty(searchTerm))
-      {
-        query = query.Where(c => c.Code.Contains(searchTerm));
-      }
-
-      return query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+      return _applicationDBContext.Coupons.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
     }
 
     public Coupon GetOneCoupon(int couponId)

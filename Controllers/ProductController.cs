@@ -4,7 +4,7 @@ using ecommerce.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ecommerce.Services
+namespace ecommerce.Controllers
 {
   [ApiController]
   [Route("/api/products")]
