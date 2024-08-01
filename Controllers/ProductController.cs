@@ -30,7 +30,7 @@ namespace ecommerce.Controllers
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult GetAllProducts([FromQuery] string? searchTerm, string? sortBy, int pageNumber, int itemSize)
+    public IActionResult GetAllProducts([FromQuery] string? searchTerm, string? sortBy, int pageNumber = 1, int itemSize = 20)
     {
       var products = _productRepository.GetAllProducts(searchTerm, sortBy, pageNumber, itemSize);
 

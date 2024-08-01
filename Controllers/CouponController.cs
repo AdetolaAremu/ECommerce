@@ -95,7 +95,7 @@ namespace ecommerce.Controllers
       return _responseHelper.SuccessResponseHelper<string>("Coupon updated successfully", null);
     }
 
-    [HttpGet("coupos/product/{productId}")]
+    [HttpGet("/product/{productId}")]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -113,7 +113,7 @@ namespace ecommerce.Controllers
       return _responseHelper.SuccessResponseHelper("Coupons retrieved successfully", coupons);
     }
 
-    [HttpDelete("/{couponId}")]
+    [HttpDelete("{couponId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -150,7 +150,7 @@ namespace ecommerce.Controllers
       if (checkCoupon == null) return _responseHelper.ErrorResponseHelper<string>("Coupon code is not correct or does not exist");
 
       // check expiry
-      if (!_couponRepository.CheckCouponExpiry(checkCoupon)) return _responseHelper.ErrorResponseHelper<string>("Coupon has expired");
+      if (_couponRepository.CheckCouponExpiry(checkCoupon)) return _responseHelper.ErrorResponseHelper<string>("Coupon has expired");
 
       if (!ModelState.IsValid) return _responseHelper.ErrorResponseHelper("An error occurred", ModelState, 500);
 

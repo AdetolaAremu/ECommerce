@@ -60,8 +60,13 @@ namespace ecommerce.Services
     public bool UpdateCoupon(int couponId, CouponDTO couponDTO)
     {
       var coupon = _applicationDBContext.Coupons.Where(c => c.Id == couponId).First();
+ 
+      string hashedCouponCode = null;
+      if (couponDTO.Code != null) {
+        hashedCouponCode = _authService.HashString(couponDTO.Code);
+      } 
 
-      coupon.Code = couponDTO.Code;
+      coupon.Code = couponDTO.Code != null ? hashedCouponCode : coupon.Code;
       coupon.DiscountStarts = couponDTO.DiscountStarts;
       coupon.DiscountEnds = couponDTO.DiscountEnds;
 
@@ -94,7 +99,7 @@ namespace ecommerce.Services
     public bool CheckCouponExpiry(Coupon coupon)
     {
       var today = DateTime.Now;
-
+      // Console.WriteLine( today > coupon.DiscountEnds ? true : false);
       return today > coupon.DiscountEnds ? true : false;
     }
 

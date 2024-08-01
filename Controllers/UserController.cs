@@ -42,7 +42,7 @@ namespace ecommerce.Controllers
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public IActionResult GetAllUsers([FromQuery] int pageSize, [FromQuery] int pageNumber)
+    public IActionResult GetAllUsers([FromQuery] int pageSize = 20, int pageNumber = 1)
     {
       if (!_userRepository.CheckIfUserIsAnAdmin()) return _responseHelper.ErrorResponseHelper<string>("User is not an admin", null, 401);
 
