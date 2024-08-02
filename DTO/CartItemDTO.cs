@@ -13,8 +13,5 @@ namespace ecommerce.DTO
   {
     [Required]
     public int ProductId { get; set; }
-
-    [Required]
-    public int ShoppingCartId { get; set; }
   }
 }

@@ -20,25 +20,18 @@ namespace ecommerce.Services
       return _applicationDBContext.ShoppingCarts.Where(sc => sc.UserId == userId).Include(ci => ci.CartItems).FirstOrDefault();
     }
 
-    public bool AddItemtoShoppingCart(CartItemDTO cartItemDTO, int userId)
+    public bool CreateShoppingCart(int userId, int productId)
     {
-      var checkCart = CheckIfProductExistsInCartItem(cartItemDTO.ProductId, userId);
+      var shoppingCart = new ShoppingCart(){
+        UserId = userId
+      };
 
-      ShoppingCart shoppingCart = null;
+      _applicationDBContext.Add(shoppingCart);
 
-      if(!checkCart)
-      {
-        shoppingCart = new ShoppingCart(){
-          UserId = userId
-        };
-
-        _applicationDBContext.Add(shoppingCart);
-
-        SaveTransaction();
-      }
+      SaveTransaction();
 
       var cartItem = new CartItem(){
-        ProductId = cartItemDTO.ProductId,
+        ProductId = productId,
         ShoppingCartId = shoppingCart.Id
       };
 
@@ -47,9 +40,29 @@ namespace ecommerce.Services
       return SaveTransaction();
     }
 
+    public bool AddItemtoShoppingCart(CreateCartItemDTO cartItemDTO, int userId)
+    {
+      var checkCart = _applicationDBContext.ShoppingCarts.Where(sc => sc.UserId == userId).First();
+
+      if(checkCart == null)
+      {
+        return CreateShoppingCart(userId, cartItemDTO.ProductId);
+      }
+
+      // get cart
+      var userCartItem = new CartItem(){
+        ProductId = cartItemDTO.ProductId,
+        ShoppingCartId = checkCart.Id
+      };
+
+      _applicationDBContext.Add(userCartItem);
+
+      return SaveTransaction();
+    }
+
     public bool CheckIfProductExistsInCartItem(int productId, int userId)
     {
-      return _applicationDBContext.ShoppingCarts.Any(sc => sc.UserId == userId);
+      return _applicationDBContext.CartItems.Any(sc => sc.ShoppingCart.UserId == userId && sc.ProductId == productId);
     }
 
     public bool ClearShoppingCart(int userId)

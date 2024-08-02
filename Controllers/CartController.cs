@@ -41,7 +41,7 @@ namespace ecommerce.Controllers
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public IActionResult AddProductToCart([FromBody] CartItemDTO cartItemDTO)
+    public IActionResult AddProductToCart([FromBody] CreateCartItemDTO cartItemDTO)
     {
       if (cartItemDTO == null) return _responseHelper.ErrorResponseHelper<string>("Request body cannot be empty");
 
@@ -92,7 +92,7 @@ namespace ecommerce.Controllers
 
       if (!cart) return _responseHelper.ErrorResponseHelper<string>("Unable to delete cart item due to some issues", null, 500);
 
-      return _responseHelper.SuccessResponseHelper<string>("Cart deleted successfully", null);
+      return _responseHelper.SuccessResponseHelper<string>("Cart item deleted successfully", null);
     }
   }
 }

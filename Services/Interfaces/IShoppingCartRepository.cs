@@ -9,7 +9,7 @@ namespace ecommerce.Services.Interfaces
     ShoppingCart GetLoggedInUserCart(int userId);
 
     // add to cart items
-    bool AddItemtoShoppingCart(CartItemDTO cartItemDTO, int userId);
+    bool AddItemtoShoppingCart(CreateCartItemDTO cartItemDTO, int userId);
 
     // cart item exist (product id)
     bool CheckIfProductExistsInCartItem(int productId, int userId);
