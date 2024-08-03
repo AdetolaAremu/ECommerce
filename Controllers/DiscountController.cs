@@ -67,8 +67,6 @@ namespace ecommerce.Controllers
 
       if (createDiscountDTO == null) return _responseHelper.ErrorResponseHelper<string>("Request body cannot be empty");
 
-      // if (!_discountRepository.DiscountExistsForProduct(createDiscountDTO.ProductId)) return _responseHelper.SuccessResponseHelper<string>("Discount does not exists for product", null, 400);
-
       var createDiscount = _discountRepository.CreateDiscount(createDiscountDTO);
 
       if (!createDiscount) return _responseHelper.ErrorResponseHelper<string>("Unable to create discount due to some issues", null, 500);

@@ -15,15 +15,17 @@ namespace ecommerce.Controllers
     private ResponseHelper _responseHelper;
     private IUserRepository _userRepository;
     private IProductRepository _productRepository;
+    private IDiscountRepository _discountRepository;
 
     public CartContoller(IShoppingCartRepository shoppingCartRepository, ResponseHelper responseHelper, IUserRepository userRepository,
-      IProductRepository productRepository 
+      IProductRepository productRepository, IDiscountRepository discountRepository 
     )
     {
       _shoppingCartRepository = shoppingCartRepository;
       _responseHelper = responseHelper;
       _userRepository = userRepository;
       _productRepository = productRepository;
+      _discountRepository = discountRepository;
     }
 
     [HttpGet]
@@ -51,6 +53,11 @@ namespace ecommerce.Controllers
         return _responseHelper.ErrorResponseHelper<string>("Product already exist in your shopping cart");
 
       if (!_productRepository.CheckIfProductExists(cartItemDTO.ProductId)) return _responseHelper.ErrorResponseHelper<string>("Product does not exists");
+
+      // object discount = new {};
+      // if (_discountRepository.DiscountExistsForProduct(cartItemDTO.ProductId)) {
+      //   discount = _discountRepository.GetProductDiscount(cartItemDTO.ProductId);
+      // }
 
       var cart = _shoppingCartRepository.AddItemtoShoppingCart(cartItemDTO, user.Id);
 

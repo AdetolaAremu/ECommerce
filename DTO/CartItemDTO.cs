@@ -17,8 +17,13 @@ namespace ecommerce.DTO
     [Required]
     public int ProductId { get; set; }
 
-    // [Required]
-    // public string Title {get; set;}
+    public int couponId {get; set;}
+
+    public int couponCode {get; set;}
+
+    public int disCountPercentage {get; set;}
+
+    public int discountId {get; set;}
 
     // [Required]
     // public decimal Price { get; set; }
