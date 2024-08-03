@@ -20,9 +20,9 @@ namespace ecommerce.Services
         .Take(pageSize).ToList();
     }
 
-    public Discount GetOneDiscount(int discountId)
+    public Discount GetProductDiscount(int productId)
     {
-      return _applicationDBContext.Discounts.Where(d => d.Id == discountId).First();
+      return _applicationDBContext.Discounts.Where(d => d.ProductId == productId).First();
     }
 
     public bool CreateDiscount(CreateDiscountDTO createDiscountDTO)
@@ -50,9 +50,26 @@ namespace ecommerce.Services
       return SaveTransaction();
     }
 
+    public Discount GetDiscount(int discountId)
+    {
+      return _applicationDBContext.Discounts.Where(d => d.Id == discountId).First();
+    }
+
     public bool DiscountExists(int discountId)
     {
-      return _applicationDBContext.Coupons.Any(d => d.Id == discountId);
+      return _applicationDBContext.Discounts.Any(d => d.Id == discountId);
+    }
+
+    public bool DiscountExistsForProduct(int productId)
+    {
+      return _applicationDBContext.Discounts.Any(d => d.ProductId == productId);
+    }
+
+    public bool isDiscountValid(Discount discount)
+    {
+      var today = DateTime.Now;
+      
+      return today > discount.DiscountEnds ? true : false;
     }
 
     public bool DeleteDiscount(Discount discount)

@@ -10,10 +10,16 @@ namespace ecommerce.Services.Interfaces
     IEnumerable<Discount> GetAllDiscounts(int pageNumber, int pageSize);
 
     // get a discount
-    Discount GetOneDiscount(int discountId);
+    Discount GetDiscount(int discountId);
+
+    // get product discount
+    Discount GetProductDiscount(int productId);
 
     // discount exists
     bool DiscountExists(int discountId);
+
+    // discount for product exists
+    bool DiscountExistsForProduct(int productId);
 
     // create a discount
     bool CreateDiscount(CreateDiscountDTO createDiscountDTO);
@@ -23,6 +29,9 @@ namespace ecommerce.Services.Interfaces
 
     // delete a discount
     bool DeleteDiscount(Discount discount);
+
+    // is discount valid
+    bool isDiscountValid(Discount discount);
 
     bool SaveTransaction();
   }

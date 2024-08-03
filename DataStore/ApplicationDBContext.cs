@@ -116,6 +116,14 @@ namespace ecommerce.DataStore
       modelBuilder.Entity<Product>()
         .Property(r => r.Price)
         .HasColumnType("decimal(18, 2)");
+
+      modelBuilder.Entity<CartItem>()
+        .Property(ci => ci.Price)
+        .HasColumnType("decimal(18, 2)");
+      
+      modelBuilder.Entity<OrderedProduct>()
+        .Property(op => op.Price)
+        .HasColumnType("decimal(18, 2)");
     }
   }
 }

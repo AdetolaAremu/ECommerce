@@ -20,7 +20,7 @@ namespace ecommerce.Services
       return _applicationDBContext.ShoppingCarts.Where(sc => sc.UserId == userId).Include(ci => ci.CartItems).FirstOrDefault();
     }
 
-    public bool CreateShoppingCart(int userId, int productId)
+    public bool CreateShoppingCart(CreateCartItemDTO cartItemDTO, int userId)
     {
       var shoppingCart = new ShoppingCart(){
         UserId = userId
@@ -30,8 +30,13 @@ namespace ecommerce.Services
 
       SaveTransaction();
 
+      var product = _applicationDBContext.Products.Where(p => p.Id == cartItemDTO.ProductId).First();
+
       var cartItem = new CartItem(){
-        ProductId = productId,
+        ProductId = cartItemDTO.ProductId,
+        Price = product.Price,
+        Quantity = cartItemDTO.Quantity,
+        Title = product.Title,
         ShoppingCartId = shoppingCart.Id
       };
 
@@ -42,16 +47,20 @@ namespace ecommerce.Services
 
     public bool AddItemtoShoppingCart(CreateCartItemDTO cartItemDTO, int userId)
     {
-      var checkCart = _applicationDBContext.ShoppingCarts.Where(sc => sc.UserId == userId).First();
+      var checkCart = _applicationDBContext.ShoppingCarts.Where(sc => sc.UserId == userId).FirstOrDefault();
 
       if(checkCart == null)
       {
-        return CreateShoppingCart(userId, cartItemDTO.ProductId);
+        return CreateShoppingCart(cartItemDTO, userId); 
       }
 
-      // get cart
+      var product = _applicationDBContext.Products.Where(p => p.Id == cartItemDTO.ProductId).First();
+
       var userCartItem = new CartItem(){
         ProductId = cartItemDTO.ProductId,
+        Price = product.Price,
+        Quantity = cartItemDTO.Quantity,
+        Title = product.Title,
         ShoppingCartId = checkCart.Id
       };
 

@@ -14,6 +14,8 @@ namespace ecommerce.Services.Interfaces
     // cart item exist (product id)
     bool CheckIfProductExistsInCartItem(int productId, int userId);
 
+    bool CreateShoppingCart(CreateCartItemDTO cartItemDTO, int userId);
+
     // remove items from shoppingCart
     bool ClearShoppingCart(int userId);
 
