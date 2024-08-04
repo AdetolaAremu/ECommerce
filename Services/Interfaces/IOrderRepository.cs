@@ -16,7 +16,7 @@ namespace ecommerce.Services.Interfaces
     // check if order exists
     bool CheckIfOrderExists(int orderId);
 
-    bool CheckOut(int userId, List<CartItem> cartItems,  Coupon? coupon);
+    bool CheckOut(int userId, List<CartItem> cartItems, Coupon? coupon);
 
     bool SaveTransaction();
   }
