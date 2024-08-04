@@ -27,15 +27,6 @@ namespace ecommerce.Services
       return _applicationDBContext.Coupons.Where(c => c.Id == couponId).First();
     }
 
-    public IEnumerable<Coupon> GetAllCouponsPerProduct(int ProductId, int pageSize, int pageNumber)
-    {
-      var query = _applicationDBContext.Coupons.AsQueryable();
-
-      query = query.Where(c => c.Product.Id == ProductId);
-
-      return query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
-    }
-
     public bool CouponExists(int couponId)
     {
       return _applicationDBContext.Coupons.Any(c => c.Id == couponId);
@@ -47,7 +38,7 @@ namespace ecommerce.Services
 
       var coupon = new Coupon(){
         Code = hashedCouponCode,
-        ProductId = createCouponDTO.ProductId,
+        Percentage = createCouponDTO.Percentage,
         DiscountStarts = createCouponDTO.DiscountStarts,
         DiscountEnds = createCouponDTO.DiscountEnds,
       };
@@ -73,9 +64,9 @@ namespace ecommerce.Services
       return SaveTransaction();
     }
 
-    public Coupon CheckCouponCode(string code, int productId)
+    public Coupon CheckCouponCode(string code)
     {
-      var getCoupon = _applicationDBContext.Coupons.Where(c => c.ProductId == productId).ToList();
+      var getCoupon = _applicationDBContext.Coupons.ToList();
       
       bool couponCorrect = false;
       Coupon currentCoupon = new Coupon{};
@@ -89,7 +80,7 @@ namespace ecommerce.Services
         }
       }
 
-      if (couponCorrect) {
+      if (couponCorrect && CheckCouponExpiry(currentCoupon)) {
         return currentCoupon;
       } else {
         return null;

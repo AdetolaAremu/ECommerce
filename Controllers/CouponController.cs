@@ -56,11 +56,9 @@ namespace ecommerce.Controllers
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public IActionResult CreateProductCoupon([FromBody] CreateCouponDTO createCouponDTO)
+    public IActionResult CreateCoupon([FromBody] CreateCouponDTO createCouponDTO)
     {
       if (!_userRepository.CheckIfUserIsAnAdmin()) return _responseHelper.ErrorResponseHelper<string>("User is not an admin", null, 401);
-
-      if (!_productRepository.CheckIfProductExists(createCouponDTO.ProductId)) return _responseHelper.ErrorResponseHelper<string>("Product does not exist", null, 404);
 
       if (createCouponDTO == null) return _responseHelper.ErrorResponseHelper<string>("Request body is empty");    
 
@@ -78,7 +76,7 @@ namespace ecommerce.Controllers
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public IActionResult UpdateProductCoupon(int couponId, CouponDTO couponDTO)
+    public IActionResult UpdateCoupon(int couponId, CouponDTO couponDTO)
     {
       if (!_userRepository.CheckIfUserIsAnAdmin()) return _responseHelper.ErrorResponseHelper<string>("User is not an admin", null, 401);
 
@@ -95,30 +93,12 @@ namespace ecommerce.Controllers
       return _responseHelper.SuccessResponseHelper<string>("Coupon updated successfully", null);
     }
 
-    [HttpGet("/product/{productId}")]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public IActionResult GetCouponsForAProduct(int productId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
-    {
-      if (!_userRepository.CheckIfUserIsAnAdmin()) return _responseHelper.ErrorResponseHelper<string>("User is not an admin", null, 401);
-
-      if (!_productRepository.CheckIfProductExists(productId)) return _responseHelper.ErrorResponseHelper<string>("Product does not exist", null, 404);
-      
-      if (pageNumber <= 0) pageNumber = 1;
-      if (pageSize <= 0) pageSize = 1;
-
-      var coupons = _couponRepository.GetAllCouponsPerProduct(productId, pageSize, pageNumber);
-
-      return _responseHelper.SuccessResponseHelper("Coupons retrieved successfully", coupons);
-    }
-
     [HttpDelete("{couponId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public IActionResult DeleteProduct(int couponId)
+    public IActionResult DeleteCoupon(int couponId)
     {
       if (!_userRepository.CheckIfUserIsAnAdmin()) return _responseHelper.ErrorResponseHelper<string>("User is not an admin", null, 401);
 
@@ -145,7 +125,7 @@ namespace ecommerce.Controllers
       if (!_productRepository.CheckIfProductExists(productId)) return _responseHelper.ErrorResponseHelper<string>("Product does not exist", null, 404);
 
       // check if any coupon matches the incoming code
-      var checkCoupon = _couponRepository.CheckCouponCode(code, productId);
+      var checkCoupon = _couponRepository.CheckCouponCode(code);
 
       if (checkCoupon == null) return _responseHelper.ErrorResponseHelper<string>("Coupon code is not correct or does not exist");
 

@@ -14,9 +14,13 @@ namespace ecommerce.Services
       _applicationDBContext = applicationDBContext;
     }
 
-    public bool CheckOut (int userId, List<CartItem> cartItems)
+    public bool CheckOut (int userId, List<CartItem> cartItems, Coupon? coupon)
     {
       decimal totalAmount = cartItems.Sum(ci => ci.Price);
+
+      if (coupon != null) {
+        totalAmount = totalAmount * coupon.Percentage / 100;
+      }
 
       var order = new Order(){
         UserId = userId,

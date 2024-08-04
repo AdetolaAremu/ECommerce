@@ -12,9 +12,10 @@ namespace ecommerce.Controllers
     private IShoppingCartRepository _shoppingCartRepository;
     private IUserRepository _userRepository;
     private IDiscountRepository _discountRepository;
+    private ICouponRepository _couponRepository;
 
     public OrderController(IOrderRespository orderRespository, ResponseHelper responseHelper, IShoppingCartRepository shoppingCartRepository,
-      IUserRepository userRepository, IDiscountRepository discountRepository
+      IUserRepository userRepository, IDiscountRepository discountRepository, ICouponRepository couponRepository
     )
     {
       _orderRespository = orderRespository;
@@ -22,9 +23,10 @@ namespace ecommerce.Controllers
       _shoppingCartRepository = shoppingCartRepository;
       _userRepository = userRepository;
       _discountRepository = discountRepository;
+      _couponRepository = couponRepository;
     }
 
-    public IActionResult CheckOut() 
+    public IActionResult CheckOut([FromQuery] string? couponCode) 
     {
       // check if user has cart items at all
       var user = _userRepository.GetLoggedInUser();
@@ -49,7 +51,13 @@ namespace ecommerce.Controllers
         cartLists.Add(item);
       }
 
-      var checkoutItems = _orderRespository.CheckOut(user.Id, cartLists);
+      Coupon coupon= null;
+
+      if (!String.IsNullOrEmpty(couponCode)) {
+        coupon = _couponRepository.CheckCouponCode(couponCode);        
+      }
+
+      var checkoutItems = _orderRespository.CheckOut(user.Id, cartLists, coupon);
 
       if (!checkoutItems) return _responseHelper.ErrorResponseHelper<string>("Unable to checkout due to some issues", null, 500);
       

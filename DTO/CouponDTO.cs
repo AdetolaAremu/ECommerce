@@ -8,11 +8,11 @@ namespace ecommerce.DTO
     public int Id { get; set; }
 
     [Required]
-    public int ProductId { get; set; }
-
-    [Required]
     [StringLength(100)]
     public string Code { get; set; }
+
+    [Required]
+    public decimal Percentage { get; set; }
 
     [Required]
     public DateTime DiscountStarts { get; set; }
@@ -21,11 +21,11 @@ namespace ecommerce.DTO
 
   public class CreateCouponDTO
   {
-    [Required]
-    public int ProductId { get; set; }
-
     [StringLength(150)]
     public string Code { get; set; }
+
+    [Required]
+    public decimal Percentage { get; set; }
     
     [Required]
     public DateTime DiscountStarts { get; set; }

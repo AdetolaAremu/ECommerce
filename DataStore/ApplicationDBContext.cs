@@ -71,12 +71,6 @@ namespace ecommerce.DataStore
         .OnDelete(DeleteBehavior.Restrict);
 
       modelBuilder.Entity<Product>()
-        .HasMany(c => c.Coupons)
-        .WithOne(p => p.Product)
-        .HasForeignKey(p => p.ProductId)
-        .OnDelete(DeleteBehavior.Cascade);
-
-      modelBuilder.Entity<Product>()
         .HasMany(pi => pi.ProductImages)
         .WithOne(p => p.Product)
         .HasForeignKey(p => p.ProductId)
