@@ -15,9 +15,9 @@ namespace ecommerce.Services
       _applicationDBContext = applicationDBContext;
     }
 
-    public ShoppingCart GetLoggedInUserCart(int userId)
+    public IEnumerable<CartItem> GetLoggedInUserCart(int userId)
     {
-      return _applicationDBContext.ShoppingCarts.Where(sc => sc.UserId == userId).Include(ci => ci.CartItems).FirstOrDefault();
+      return _applicationDBContext.ShoppingCarts.Where(sc => sc.UserId == userId).SelectMany(sc => sc.CartItems).ToList();
     }
 
     public bool CreateShoppingCart(CreateCartItemDTO cartItemDTO, int userId)

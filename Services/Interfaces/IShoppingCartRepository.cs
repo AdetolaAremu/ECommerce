@@ -6,7 +6,7 @@ namespace ecommerce.Services.Interfaces
   public interface IShoppingCartRepository
   {
     // get logged in user cart
-    ShoppingCart GetLoggedInUserCart(int userId);
+    IEnumerable<CartItem> GetLoggedInUserCart(int userId);
 
     // add to cart items
     bool AddItemtoShoppingCart(CreateCartItemDTO cartItemDTO, int userId);

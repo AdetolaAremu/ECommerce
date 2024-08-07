@@ -22,7 +22,7 @@ namespace ecommerce.Services
 
     public Discount GetProductDiscount(int productId)
     {
-      return _applicationDBContext.Discounts.Where(d => d.ProductId == productId).First();
+      return _applicationDBContext.Discounts.Where(d => d.ProductId == productId).FirstOrDefault();
     }
 
     public bool CreateDiscount(CreateDiscountDTO createDiscountDTO)

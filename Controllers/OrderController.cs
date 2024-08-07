@@ -32,13 +32,12 @@ namespace ecommerce.Controllers
       _logger = logger;
     }
 
-    [HttpPost]
+    [HttpPost("checkout")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult CheckOut([FromQuery] string? couponCode) 
     {
-      // check if user has cart items at all
       var user = _userRepository.GetLoggedInUser();
 
       var cartItems = _shoppingCartRepository.GetLoggedInUserCart(user.Id);
@@ -49,15 +48,14 @@ namespace ecommerce.Controllers
 
       var cartLists = new List<CartItem>();
 
-      foreach (var item in cartItems.CartItems)
+      foreach (var item in cartItems)
       {
         // cart items
         var checkDiscount = _discountRepository.GetProductDiscount(item.ProductId);
-        Console.WriteLine($"This is: {checkDiscount.Percentage}");
 
         if (checkDiscount != null)
         {
-          item.Price = item.Price * (checkDiscount.Percentage / 100);
+          item.Price = item.Price * (1 - checkDiscount.Percentage / 100);
         }
 
         cartLists.Add(item);
@@ -72,8 +70,45 @@ namespace ecommerce.Controllers
       var checkoutItems = _orderRespository.CheckOut(user.Id, cartLists, coupon);
 
       if (!checkoutItems) return _responseHelper.ErrorResponseHelper<string>("Unable to checkout due to some issues", null, 500);
+
+      _shoppingCartRepository.ClearShoppingCart(user.Id);
       
       return _responseHelper.SuccessResponseHelper("Item added to cart successfully", cartLists, 201);
+    }
+
+    [HttpGet("logged-in-user")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public IActionResult GetLoggedInUserOrders([FromQuery] int pageNumber = 1, int pageSize = 15)
+    {
+      var user = _userRepository.GetLoggedInUser();
+
+      var orders = _orderRespository.GetLoggedInUserOrders(user.Id, pageNumber, pageSize);
+
+      return _responseHelper.SuccessResponseHelper("Orders retrieved successfully", orders);
+    }
+
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public IActionResult GetAllOrders([FromQuery] int pageNumber = 1, int pageSize = 15)
+    {
+      if (!_userRepository.CheckIfUserIsAnAdmin()) return _responseHelper.ErrorResponseHelper<string>("You are not authorized", null, 401);
+
+      var orders = _orderRespository.GetAllOrders(pageNumber, pageSize);
+
+      return _responseHelper.SuccessResponseHelper("Orders retrieved successfully", orders);
+    }
+
+    [HttpGet("{orderId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IActionResult GetOneOrder(int orderId)
+    {
+      if (!_orderRespository.CheckIfOrderExists(orderId)) return _responseHelper.ErrorResponseHelper<string>("Order does not exist", null, 404);
+
+      var order = _orderRespository.GetOneOrder(orderId);
+
+      return _responseHelper.SuccessResponseHelper("Order retrieved successfully", order);
     }
   }
 }
