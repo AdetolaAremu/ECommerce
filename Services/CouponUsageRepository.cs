@@ -1,4 +1,5 @@
 using ecommerce.DataStore;
+using ecommerce.DTO;
 using ecommerce.Models;
 using ecommerce.Services.Interfaces;
 
@@ -26,6 +27,18 @@ namespace ecommerce.Services
       return query.Skip((pageNumber -1) * pageSize).Take(pageSize).ToList();
     }
 
+    public bool CreateCouponUsage(int productId, int userId)
+    {
+      var coupon = new CouponUsage(){
+        ProductId = productId,
+        UserId = userId
+      };
+
+      _applicationDbContext.Add(coupon);
+
+      return SaveTransaction();
+    }
+
     public IEnumerable<CouponUsage> GetCouponUsagesForAProduct(int ProductId)
     {
       return _applicationDbContext.CouponUsages.Where(cu => cu.ProductId == ProductId).ToList();
@@ -39,6 +52,13 @@ namespace ecommerce.Services
     public bool CouponUsageExists(int couponUsageId)
     {
       return _applicationDbContext.CouponUsages.Any(cu => cu.Id == couponUsageId);
+    }
+
+    public bool SaveTransaction()
+    {
+      var saveChanges = _applicationDbContext.SaveChanges();
+
+      return saveChanges >= 0 ? true : false;
     }
   }
 }

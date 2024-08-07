@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using ecommerce.DTO;
 using ecommerce.Models;
 
 namespace ecommerce.Services.Interfaces
@@ -16,5 +17,9 @@ namespace ecommerce.Services.Interfaces
     
     // check if coupon exists
     bool CouponUsageExists(int couponUsageId);
+
+    bool CreateCouponUsage(int productId, int userId);
+
+    bool SaveTransaction();
   }
 }

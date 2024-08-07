@@ -1,4 +1,5 @@
 using ecommerce.DataStore;
+using ecommerce.DTO;
 using ecommerce.Models;
 using ecommerce.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -59,18 +60,29 @@ namespace ecommerce.Services
       return SaveTransaction();
     }
 
-    public IEnumerable<OrderedProduct> GetAllOrders(int pageNumber, int pageSize)
+    public List<OrderDTO> GetAllOrders(int pageNumber, int pageSize)
     {
-      return _applicationDBContext.Orders.SelectMany(sc => sc.OrderedProducts).Skip((pageNumber - 1) * pageSize)
-        .Take(pageSize).ToList();
+      return _applicationDBContext.Orders.Skip((pageNumber - 1) * pageSize).Take(pageSize)
+        .Select(o => new OrderDTO{
+           Id = o.Id,
+          DeliveryFees = o.DeliveryFees,
+          UserId = o.UserId,
+          Status = o.Status,
+          Amount = o.Amount
+        })
+        .ToList();
     }
 
-    public IEnumerable<OrderedProduct> GetLoggedInUserOrders(int userId, int pageNumber, int pageSize)
+    public List<OrderDTO> GetLoggedInUserOrders(int userId, int pageNumber, int pageSize)
     {
-      return _applicationDBContext.Orders.Where(o => o.UserId == userId).SelectMany(
-        sc => sc.OrderedProducts
-      ).Skip((pageNumber - 1) * pageSize)
-        .Take(pageSize).ToList();
+      return _applicationDBContext.Orders.Where(o => o.UserId == userId).Skip((pageNumber - 1) * pageSize)
+        .Take(pageSize).Select(o => new OrderDTO {
+          Id = o.Id,
+          DeliveryFees = o.DeliveryFees,
+          UserId = o.UserId,
+          Status = o.Status,
+          Amount = o.Amount
+        }).ToList();
     }
 
     public bool CheckIfOrderExists(int orderId)
@@ -78,9 +90,9 @@ namespace ecommerce.Services
       return _applicationDBContext.Orders.Any(o => o.Id == orderId);
     }
 
-    public Order GetOneOrder(int orderId)
+    public IEnumerable<Order> GetOneOrder(int orderId)
     {
-      return _applicationDBContext.Orders.Where(o => o.Id == orderId).First();
+      return _applicationDBContext.Orders.Where(o => o.Id == orderId).Include(op => op.OrderedProducts).ToList();
     }
 
     public bool SaveTransaction()

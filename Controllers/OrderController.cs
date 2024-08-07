@@ -18,9 +18,11 @@ namespace ecommerce.Controllers
     private IDiscountRepository _discountRepository;
     private ICouponRepository _couponRepository;
     private readonly ILogger<OrderController> _logger;
+    private ICouponUsageRepository _couponUsageRepository;
 
     public OrderController(IOrderRespository orderRespository, ResponseHelper responseHelper, IShoppingCartRepository shoppingCartRepository,
-      IUserRepository userRepository, IDiscountRepository discountRepository, ICouponRepository couponRepository, ILogger<OrderController> logger
+      IUserRepository userRepository, IDiscountRepository discountRepository, ICouponRepository couponRepository, ILogger<OrderController> logger,
+      ICouponUsageRepository couponUsageRepository
     )
     {
       _orderRespository = orderRespository;
@@ -30,6 +32,7 @@ namespace ecommerce.Controllers
       _discountRepository = discountRepository;
       _couponRepository = couponRepository;
       _logger = logger;
+      _couponUsageRepository = couponUsageRepository;
     }
 
     [HttpPost("checkout")]
@@ -64,7 +67,7 @@ namespace ecommerce.Controllers
       Coupon coupon= null;
 
       if (!String.IsNullOrEmpty(couponCode)) {
-        coupon = _couponRepository.CheckCouponCode(couponCode);        
+        coupon = _couponRepository.CheckCouponCode(couponCode);
       }
 
       var checkoutItems = _orderRespository.CheckOut(user.Id, cartLists, coupon);

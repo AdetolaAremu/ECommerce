@@ -1,3 +1,4 @@
+using ecommerce.DTO;
 using ecommerce.Models;
 
 namespace ecommerce.Services.Interfaces
@@ -5,13 +6,13 @@ namespace ecommerce.Services.Interfaces
   public interface IOrderRespository
   {
     // Get All Orders
-    IEnumerable<OrderedProduct> GetAllOrders(int pageNumber, int pageSize);
+    List<OrderDTO> GetAllOrders(int pageNumber, int pageSize);
 
     // Get All Orders by logged in user
-    IEnumerable<OrderedProduct> GetLoggedInUserOrders(int userId, int pageNumber, int pageSize);
+    List<OrderDTO> GetLoggedInUserOrders(int userId, int pageNumber, int pageSize);
 
     // Get one order, alongside orderedItems
-    Order GetOneOrder(int orderId);
+    IEnumerable<Order> GetOneOrder(int orderId);
 
     // create order
     Order CreateOrder(int userId, decimal amount);
